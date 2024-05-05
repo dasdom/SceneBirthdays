@@ -8,20 +8,26 @@
 
 /* Begin PBXBuildFile section */
 		F2D4E2112BE565A700432050 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D4E2102BE565A700432050 /* AppDelegate.m */; };
-		F2D4E2142BE565A700432050 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D4E2132BE565A700432050 /* SceneDelegate.m */; };
 		F2D4E2172BE565A700432050 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D4E2162BE565A700432050 /* ViewController.m */; };
 		F2D4E21A2BE565A700432050 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = F2D4E2192BE565A700432050 /* Base */; };
 		F2D4E21C2BE565A800432050 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F2D4E21B2BE565A800432050 /* Assets.xcassets */; };
 		F2D4E21F2BE565A800432050 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = F2D4E21E2BE565A800432050 /* Base */; };
 		F2D4E2222BE565A800432050 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D4E2212BE565A800432050 /* main.m */; };
+		F2D4E22A2BE5660F00432050 /* DDHSolarSystemView.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D4E2292BE5660F00432050 /* DDHSolarSystemView.m */; };
+		F2D4E22D2BE5662000432050 /* DDHSolarSystemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D4E22C2BE5662000432050 /* DDHSolarSystemViewController.m */; };
+		F2D4E2302BE5683200432050 /* DDHNodesCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D4E22F2BE5683200432050 /* DDHNodesCreator.m */; };
+		F2D4E2562BE6094C00432050 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D4E2552BE6094C00432050 /* SceneDelegate.m */; };
+		F2D4E2582BE6274B00432050 /* Textures.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F2D4E2572BE6274200432050 /* Textures.xcassets */; };
+		F2D4E25B2BE67F6200432050 /* DDHBirthday.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D4E25A2BE67F6200432050 /* DDHBirthday.m */; };
+		F2D4E2602BE6862700432050 /* UIImage+Extenstion.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D4E25F2BE6862700432050 /* UIImage+Extenstion.m */; };
+		F2D4E2652BE7642200432050 /* DDHContactsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D4E2642BE7642200432050 /* DDHContactsManager.m */; };
+		F2D4E2682BE78A0A00432050 /* DDHDateHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D4E2672BE78A0A00432050 /* DDHDateHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		F2D4E20C2BE565A700432050 /* SceneBirthdays.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SceneBirthdays.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2D4E20F2BE565A700432050 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F2D4E2102BE565A700432050 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		F2D4E2122BE565A700432050 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
-		F2D4E2132BE565A700432050 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
 		F2D4E2152BE565A700432050 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		F2D4E2162BE565A700432050 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		F2D4E2192BE565A700432050 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -29,6 +35,23 @@
 		F2D4E21E2BE565A800432050 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F2D4E2202BE565A800432050 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F2D4E2212BE565A800432050 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		F2D4E2282BE5660F00432050 /* DDHSolarSystemView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHSolarSystemView.h; sourceTree = "<group>"; };
+		F2D4E2292BE5660F00432050 /* DDHSolarSystemView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHSolarSystemView.m; sourceTree = "<group>"; };
+		F2D4E22B2BE5662000432050 /* DDHSolarSystemViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHSolarSystemViewController.h; sourceTree = "<group>"; };
+		F2D4E22C2BE5662000432050 /* DDHSolarSystemViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHSolarSystemViewController.m; sourceTree = "<group>"; };
+		F2D4E22E2BE5683200432050 /* DDHNodesCreator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHNodesCreator.h; sourceTree = "<group>"; };
+		F2D4E22F2BE5683200432050 /* DDHNodesCreator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHNodesCreator.m; sourceTree = "<group>"; };
+		F2D4E2542BE6094C00432050 /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
+		F2D4E2552BE6094C00432050 /* SceneDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
+		F2D4E2572BE6274200432050 /* Textures.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Textures.xcassets; sourceTree = "<group>"; };
+		F2D4E2592BE67F6200432050 /* DDHBirthday.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHBirthday.h; sourceTree = "<group>"; };
+		F2D4E25A2BE67F6200432050 /* DDHBirthday.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHBirthday.m; sourceTree = "<group>"; };
+		F2D4E25E2BE6862700432050 /* UIImage+Extenstion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImage+Extenstion.h"; sourceTree = "<group>"; };
+		F2D4E25F2BE6862700432050 /* UIImage+Extenstion.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Extenstion.m"; sourceTree = "<group>"; };
+		F2D4E2632BE7642200432050 /* DDHContactsManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHContactsManager.h; sourceTree = "<group>"; };
+		F2D4E2642BE7642200432050 /* DDHContactsManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHContactsManager.m; sourceTree = "<group>"; };
+		F2D4E2662BE78A0A00432050 /* DDHDateHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHDateHelper.h; sourceTree = "<group>"; };
+		F2D4E2672BE78A0A00432050 /* DDHDateHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHDateHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,17 +86,48 @@
 			children = (
 				F2D4E20F2BE565A700432050 /* AppDelegate.h */,
 				F2D4E2102BE565A700432050 /* AppDelegate.m */,
-				F2D4E2122BE565A700432050 /* SceneDelegate.h */,
-				F2D4E2132BE565A700432050 /* SceneDelegate.m */,
+				F2D4E2542BE6094C00432050 /* SceneDelegate.h */,
+				F2D4E2552BE6094C00432050 /* SceneDelegate.m */,
 				F2D4E2152BE565A700432050 /* ViewController.h */,
 				F2D4E2162BE565A700432050 /* ViewController.m */,
+				F2D4E2622BE763F400432050 /* SolarSystem */,
+				F2D4E2612BE763E500432050 /* Model */,
+				F2D4E25E2BE6862700432050 /* UIImage+Extenstion.h */,
+				F2D4E25F2BE6862700432050 /* UIImage+Extenstion.m */,
 				F2D4E2182BE565A700432050 /* Main.storyboard */,
 				F2D4E21B2BE565A800432050 /* Assets.xcassets */,
+				F2D4E2572BE6274200432050 /* Textures.xcassets */,
 				F2D4E21D2BE565A800432050 /* LaunchScreen.storyboard */,
 				F2D4E2202BE565A800432050 /* Info.plist */,
 				F2D4E2212BE565A800432050 /* main.m */,
 			);
 			path = SceneBirthdays;
+			sourceTree = "<group>";
+		};
+		F2D4E2612BE763E500432050 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F2D4E2592BE67F6200432050 /* DDHBirthday.h */,
+				F2D4E25A2BE67F6200432050 /* DDHBirthday.m */,
+				F2D4E2632BE7642200432050 /* DDHContactsManager.h */,
+				F2D4E2642BE7642200432050 /* DDHContactsManager.m */,
+				F2D4E2662BE78A0A00432050 /* DDHDateHelper.h */,
+				F2D4E2672BE78A0A00432050 /* DDHDateHelper.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		F2D4E2622BE763F400432050 /* SolarSystem */ = {
+			isa = PBXGroup;
+			children = (
+				F2D4E22B2BE5662000432050 /* DDHSolarSystemViewController.h */,
+				F2D4E22C2BE5662000432050 /* DDHSolarSystemViewController.m */,
+				F2D4E2282BE5660F00432050 /* DDHSolarSystemView.h */,
+				F2D4E2292BE5660F00432050 /* DDHSolarSystemView.m */,
+				F2D4E22E2BE5683200432050 /* DDHNodesCreator.h */,
+				F2D4E22F2BE5683200432050 /* DDHNodesCreator.m */,
+			);
+			path = SolarSystem;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -134,6 +188,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F2D4E21C2BE565A800432050 /* Assets.xcassets in Resources */,
+				F2D4E2582BE6274B00432050 /* Textures.xcassets in Resources */,
 				F2D4E21F2BE565A800432050 /* Base in Resources */,
 				F2D4E21A2BE565A700432050 /* Base in Resources */,
 			);
@@ -148,8 +203,15 @@
 			files = (
 				F2D4E2172BE565A700432050 /* ViewController.m in Sources */,
 				F2D4E2112BE565A700432050 /* AppDelegate.m in Sources */,
+				F2D4E2302BE5683200432050 /* DDHNodesCreator.m in Sources */,
+				F2D4E2562BE6094C00432050 /* SceneDelegate.m in Sources */,
+				F2D4E2602BE6862700432050 /* UIImage+Extenstion.m in Sources */,
 				F2D4E2222BE565A800432050 /* main.m in Sources */,
-				F2D4E2142BE565A700432050 /* SceneDelegate.m in Sources */,
+				F2D4E22A2BE5660F00432050 /* DDHSolarSystemView.m in Sources */,
+				F2D4E2652BE7642200432050 /* DDHContactsManager.m in Sources */,
+				F2D4E22D2BE5662000432050 /* DDHSolarSystemViewController.m in Sources */,
+				F2D4E2682BE78A0A00432050 /* DDHDateHelper.m in Sources */,
+				F2D4E25B2BE67F6200432050 /* DDHBirthday.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,9 +363,9 @@
 				DEVELOPMENT_TEAM = Q6PD97MRX4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SceneBirthdays/Info.plist;
+				INFOPLIST_KEY_NSContactsUsageDescription = "Import contacts from whom you want to keep track of the birthday.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -328,9 +390,9 @@
 				DEVELOPMENT_TEAM = Q6PD97MRX4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SceneBirthdays/Info.plist;
+				INFOPLIST_KEY_NSContactsUsageDescription = "Import contacts from whom you want to keep track of the birthday.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
