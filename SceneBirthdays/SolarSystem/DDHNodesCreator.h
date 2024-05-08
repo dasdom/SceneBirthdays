@@ -7,6 +7,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class DDHBirthday;
+
 @interface DDHNodesCreator : NSObject
 + (SCNNode *)sun;
 + (SCNNode *)earth;
@@ -14,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (SCNNode *)cameraOrbit:(SCNVector3)cameraPosition verticalCameraAngle:(CGFloat)verticalCameraAngle;
 + (SCNNode *)directionalLightNode;
 + (SCNNode *)ambientLightNode;
++ (SCNNode *)birthdayIndicatorForBirthday:(DDHBirthday *)birthday;
 @end
 
 NS_ASSUME_NONNULL_END

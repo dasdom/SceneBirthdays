@@ -104,7 +104,7 @@
 }
 
 + (CGFloat)birthdayIndicatorWidth {
-  return 10;
+  return 5;
 }
 
 + (SCNNode *)birthdayIndicatorForBirthday:(DDHBirthday *)birthday {

@@ -28,14 +28,23 @@
     [scene.rootNode addChildNode:_cameraOrbit];
     [scene.rootNode addChildNode:_earthPath];
     [scene.rootNode addChildNode:[DDHNodesCreator earth]];
+    self.scene = scene;
 
-    // show statistics such as fps and timing information
+    UIButtonConfiguration *addButtonConfiguration = [UIButtonConfiguration plainButtonConfiguration];
+    addButtonConfiguration.image = [UIImage systemImageNamed:@"plus"];
+    _addButton = [UIButton buttonWithConfiguration:addButtonConfiguration primaryAction:nil];
+    _addButton.translatesAutoresizingMaskIntoConstraints = NO;
+
     self.showsStatistics = YES;
 
-    // configure the view
     self.backgroundColor = [UIColor blackColor];
 
-    self.scene = scene;
+    [self addSubview:_addButton];
+
+    [NSLayoutConstraint activateConstraints:@[
+      [_addButton.topAnchor constraintEqualToAnchor:self.safeAreaLayoutGuide.topAnchor constant:16],
+      [_addButton.trailingAnchor constraintEqualToAnchor:self.safeAreaLayoutGuide.trailingAnchor constant:-16],
+    ]];
   }
   return self;
 }

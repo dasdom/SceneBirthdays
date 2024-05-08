@@ -5,6 +5,8 @@
 
 #import "DDHSolarSystemViewController.h"
 #import "DDHSolarSystemView.h"
+#import "DDHContactsManager.h"
+#import "DDHNodesCreator.h"
 
 @interface DDHSolarSystemViewController ()
 
@@ -18,7 +20,14 @@
 
 - (void)loadView {
   DDHSolarSystemView *contentView = [[DDHSolarSystemView alloc] initWithFrame:CGRectZero options:nil];
+  [contentView.addButton addTarget:self action:@selector(add:) forControlEvents:UIControlEventTouchUpInside];
   self.view = contentView;
+}
+
+- (void)viewDidLoad {
+  [super viewDidLoad];
+
+  
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -39,6 +48,20 @@
   changeCameraPositionAnimation.removedOnCompletion = NO;
   changeCameraPositionAnimation.fillMode = kCAFillModeForwards;
   [cameraNode addAnimation:changeCameraPositionAnimation forKey:@"changeCameraPosition"];
+}
+
+- (void)add:(UIButton *)sender {
+  DDHContactsManager *contactsManager = [[DDHContactsManager alloc] init];
+  [contactsManager requestContactsAccess:^(BOOL granted) {
+    if (granted) {
+      NSArray<CNContact *> *contacts = [contactsManager fetchImportableContactsIgnoringExitingIds:@[]];
+      NSArray<DDHBirthday *> *birthdays = [contactsManager birthdaysFromContacts:contacts];
+      [birthdays enumerateObjectsUsingBlock:^(DDHBirthday * _Nonnull birthday, NSUInteger idx, BOOL * _Nonnull stop) {
+        SCNNode *node = [DDHNodesCreator birthdayIndicatorForBirthday:birthday];
+        [self.contentView.scene.rootNode addChildNode:node];
+      }];
+    }
+  }];
 }
 
 @end
