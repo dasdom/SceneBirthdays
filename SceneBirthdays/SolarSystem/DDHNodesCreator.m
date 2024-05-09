@@ -103,11 +103,38 @@
   return ambientLightNode;
 }
 
-+ (CGFloat)birthdayIndicatorWidth {
-  return 5;
++ (SCNNode *)birthdayHostNodeForDaysLeft:(NSInteger)daysLeft numberOfDaysInYear:(NSInteger)numberOfDaysInYear eulerAngles:(SCNVector3)eulerAngles {
+  SCNMaterial *dotMaterial = [[SCNMaterial alloc] init];
+  dotMaterial.diffuse.contents = [UIColor whiteColor];
+
+  SCNSphere *sphere = [SCNSphere sphereWithRadius:0.3];
+  sphere.materials = @[dotMaterial];
+
+  SCNNode *dotNode = [SCNNode nodeWithGeometry:sphere];
+
+  CGFloat angle = 360.0/numberOfDaysInYear * daysLeft;
+  CGFloat z = [self scaledEarthPathRadius] * cos(angle * M_PI / 180.0);
+  CGFloat x = [self scaledEarthPathRadius] * sin(angle * M_PI / 180.0);
+  dotNode.position = SCNVector3Make(x, 0, z);
+
+  dotNode.eulerAngles = eulerAngles;
+
+  return dotNode;
 }
 
-+ (SCNNode *)birthdayIndicatorForBirthday:(DDHBirthday *)birthday {
++ (SCNNode *)addBirthdayNodeForBirthday:(DDHBirthday *)birthday toNode:(SCNNode *)node {
+  CGFloat zPosFactor = -0.001;
+  NSInteger index = [node.childNodes count];
+  SCNNode *birthdayNode = [self birthdayIndicatorForBirthday:birthday zPos:zPosFactor * index];
+  [node addChildNode:birthdayNode];
+  return birthdayNode;
+}
+
++ (CGFloat)birthdayIndicatorWidth {
+  return 6;
+}
+
++ (SCNNode *)birthdayIndicatorForBirthday:(DDHBirthday *)birthday zPos:(CGFloat)zPos {
   SCNMaterial *material = [[SCNMaterial alloc] init];
   UIImage *image = [UIImage imageWithData:birthday.imageData];
   UIImage *roundedImage = [image roundedWithColor:[UIColor whiteColor] width:14 targetSize:CGSizeMake(500, 500)];
@@ -117,26 +144,28 @@
   plane.cornerRadius = [self birthdayIndicatorWidth]/2;
   plane.materials = @[material];
 
-  SCNNode *planeNode = [SCNNode nodeWithGeometry:plane];
-  planeNode.position = SCNVector3Make(0, [self birthdayIndicatorWidth]/2 + 0.4, 0);
-  planeNode.categoryBitMask = 1 << 0;
+  SCNNode *node = [SCNNode nodeWithGeometry:plane];
+  node.position = SCNVector3Make(0, [self birthdayIndicatorWidth]/2 + 0.4, zPos);
+  node.categoryBitMask = 1 << 0;
 
-  SCNMaterial *dotMaterial = [[SCNMaterial alloc] init];
-  dotMaterial.diffuse.contents = [UIColor whiteColor];
+  return node;
 
-  SCNSphere *sphere = [SCNSphere sphereWithRadius:0.3];
-  sphere.materials = @[dotMaterial];
-
-  SCNNode *dotNode = [SCNNode nodeWithGeometry:sphere];
-
-  CGFloat angle = 360.0/365.0 * birthday.daysLeft;
-  CGFloat z = [self scaledEarthPathRadius] * cos(angle * M_PI / 180.0);
-  CGFloat x = [self scaledEarthPathRadius] * sin(angle * M_PI / 180.0);
-  dotNode.position = SCNVector3Make(x, 0, z);
-
-  [dotNode addChildNode:planeNode];
-
-  return dotNode;
+//  SCNMaterial *dotMaterial = [[SCNMaterial alloc] init];
+//  dotMaterial.diffuse.contents = [UIColor whiteColor];
+//
+//  SCNSphere *sphere = [SCNSphere sphereWithRadius:0.3];
+//  sphere.materials = @[dotMaterial];
+//
+//  SCNNode *dotNode = [SCNNode nodeWithGeometry:sphere];
+//
+//  CGFloat angle = 360.0/365.0 * birthday.daysLeft;
+//  CGFloat z = [self scaledEarthPathRadius] * cos(angle * M_PI / 180.0);
+//  CGFloat x = [self scaledEarthPathRadius] * sin(angle * M_PI / 180.0);
+//  dotNode.position = SCNVector3Make(x, 0, z);
+//
+//  [dotNode addChildNode:planeNode];
+//
+//  return dotNode;
 }
 
 @end

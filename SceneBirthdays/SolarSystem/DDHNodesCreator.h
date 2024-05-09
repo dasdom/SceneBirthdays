@@ -16,7 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (SCNNode *)cameraOrbit:(SCNVector3)cameraPosition verticalCameraAngle:(CGFloat)verticalCameraAngle;
 + (SCNNode *)directionalLightNode;
 + (SCNNode *)ambientLightNode;
-+ (SCNNode *)birthdayIndicatorForBirthday:(DDHBirthday *)birthday;
++ (SCNNode *)birthdayHostNodeForDaysLeft:(NSInteger)daysLeft numberOfDaysInYear:(NSInteger)numberOfDaysInYear eulerAngles:(SCNVector3)eulerAngles;
++ (SCNNode *)addBirthdayNodeForBirthday:(DDHBirthday *)birthday toNode:(SCNNode *)node;
 @end
 
 NS_ASSUME_NONNULL_END

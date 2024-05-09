@@ -7,8 +7,6 @@
 #import "DDHNodesCreator.h"
 
 @interface DDHSolarSystemView ()
-@property (nonatomic, strong) SCNNode *sun;
-@property (nonatomic, strong) SCNNode *earthPath;
 @end
 
 @implementation DDHSolarSystemView

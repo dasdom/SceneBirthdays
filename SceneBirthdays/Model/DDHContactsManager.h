@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface DDHContactsManager : NSObject
 - (BOOL)isAuthorised;
 - (void)requestContactsAccess:(void(^)(BOOL granted))completionHandler;
-- (NSArray<CNContact *> *)fetchImportableContactsIgnoringExitingIds:(NSArray<NSString *> *)existingIds;
+- (void)fetchImportableContactsIgnoringExitingIds:(NSArray<NSString *> *)existingIds completionHandler:(void(^)(NSArray<CNContact *> *contacts))completionHandler;
 - (NSArray<DDHBirthday *> *)birthdaysFromContacts:(NSArray<CNContact *> *)contacts;
 @end
 
