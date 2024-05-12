@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F283E7E82BEE7D4100F7244D /* DDHSceneMonth.m in Sources */ = {isa = PBXBuildFile; fileRef = F283E7E72BEE7D4100F7244D /* DDHSceneMonth.m */; };
 		F2D4E2112BE565A700432050 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D4E2102BE565A700432050 /* AppDelegate.m */; };
 		F2D4E2172BE565A700432050 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D4E2162BE565A700432050 /* ViewController.m */; };
 		F2D4E21A2BE565A700432050 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = F2D4E2192BE565A700432050 /* Base */; };
@@ -25,6 +26,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F283E7E62BEE7D4100F7244D /* DDHSceneMonth.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHSceneMonth.h; sourceTree = "<group>"; };
+		F283E7E72BEE7D4100F7244D /* DDHSceneMonth.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHSceneMonth.m; sourceTree = "<group>"; };
 		F2D4E20C2BE565A700432050 /* SceneBirthdays.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SceneBirthdays.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2D4E20F2BE565A700432050 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F2D4E2102BE565A700432050 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -113,6 +116,8 @@
 				F2D4E2642BE7642200432050 /* DDHContactsManager.m */,
 				F2D4E2662BE78A0A00432050 /* DDHDateHelper.h */,
 				F2D4E2672BE78A0A00432050 /* DDHDateHelper.m */,
+				F283E7E62BEE7D4100F7244D /* DDHSceneMonth.h */,
+				F283E7E72BEE7D4100F7244D /* DDHSceneMonth.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -203,6 +208,7 @@
 			files = (
 				F2D4E2172BE565A700432050 /* ViewController.m in Sources */,
 				F2D4E2112BE565A700432050 /* AppDelegate.m in Sources */,
+				F283E7E82BEE7D4100F7244D /* DDHSceneMonth.m in Sources */,
 				F2D4E2302BE5683200432050 /* DDHNodesCreator.m in Sources */,
 				F2D4E2562BE6094C00432050 /* SceneDelegate.m in Sources */,
 				F2D4E2602BE6862700432050 /* UIImage+Extenstion.m in Sources */,

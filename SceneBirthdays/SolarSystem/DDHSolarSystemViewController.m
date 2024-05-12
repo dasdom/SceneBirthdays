@@ -8,6 +8,7 @@
 #import "DDHContactsManager.h"
 #import "DDHNodesCreator.h"
 #import "DDHBirthday.h"
+#import "DDHDateHelper.h"
 
 @interface DDHSolarSystemViewController () <CAAnimationDelegate>
 @property (nonatomic, assign) CGFloat startAngle;
@@ -34,6 +35,17 @@
 
   UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
   [self.view addGestureRecognizer:panRecognizer];
+
+//  NSArray<SCNNode *> *intervalNodes = [DDHNodesCreator significantIntervalsIndicatorNodesWithNumberOfDaysInYear:[self daysInYear]];
+//  [intervalNodes enumerateObjectsUsingBlock:^(SCNNode * _Nonnull node, NSUInteger idx, BOOL * _Nonnull stop) {
+//    [[self contentView].scene.rootNode addChildNode:node];
+//  }];
+
+  NSArray<DDHSceneMonth *> *sceneMonths = [DDHDateHelper sceneMonths];
+  NSArray<SCNNode *> *monthsNodes = [DDHNodesCreator monthNodesWithNumberOfDaysInYear:[self daysInYear] sceneMonth:sceneMonths];
+  [monthsNodes enumerateObjectsUsingBlock:^(SCNNode * _Nonnull node, NSUInteger idx, BOOL * _Nonnull stop) {
+    [[self contentView].scene.rootNode addChildNode:node];
+  }];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -182,7 +194,7 @@
     }
   } else if (rotationAngle < 0) {
     [self rotateToRotationAngle:rotationAngle/8];
-    CGFloat scale = 1 - rotationAngle * 0.5;
+    CGFloat scale = 1 - rotationAngle;
     [self contentView].sun.scale = SCNVector3Make(scale, scale, scale);
   } else {
     [self rotateToRotationAngle:rotationAngle];

@@ -15,7 +15,7 @@
   if (self = [super initWithFrame:frame options:options]) {
     _sun = [DDHNodesCreator sun];
     
-    _cameraOrbit = [DDHNodesCreator cameraOrbit:SCNVector3Make(0, 0.2, 0) verticalCameraAngle:-0.5];
+    _cameraOrbit = [DDHNodesCreator cameraOrbit:SCNVector3Make(0, 0.2, 0) verticalCameraAngle:-0.6];
     [_cameraOrbit addChildNode:[DDHNodesCreator directionalLightNode]];
     [_cameraOrbit addChildNode:[DDHNodesCreator ambientLightNode]];
 
@@ -25,7 +25,7 @@
     [scene.rootNode addChildNode:_sun];
     [scene.rootNode addChildNode:_cameraOrbit];
     [scene.rootNode addChildNode:_earthPath];
-    [scene.rootNode addChildNode:[DDHNodesCreator earth]];
+//    [scene.rootNode addChildNode:[DDHNodesCreator earth]];
     self.scene = scene;
 
     UIButtonConfiguration *addButtonConfiguration = [UIButtonConfiguration plainButtonConfiguration];
