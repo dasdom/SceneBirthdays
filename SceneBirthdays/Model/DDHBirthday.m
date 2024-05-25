@@ -41,4 +41,8 @@
     return NO;
   }
 }
+
+- (NSString *)description {
+  return [@[self.uuid.UUIDString, [NSString stringWithFormat:@"%ld", self.daysLeft], self.personNameComponents.givenName, self.personNameComponents.familyName] componentsJoinedByString:@", "];
+}
 @end

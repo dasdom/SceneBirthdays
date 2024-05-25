@@ -9,21 +9,36 @@
 #import "DDHNodesCreator.h"
 #import "DDHBirthday.h"
 #import "DDHDateHelper.h"
+#import "DDHBirthdayDetailsView.h"
 
 @interface DDHSolarSystemViewController () <CAAnimationDelegate>
 @property (nonatomic, assign) CGFloat startAngle;
 @property (nonatomic, strong) NSDictionary<NSUUID *, SCNNode *> *birthdayNodes;
+@property (nonatomic, strong) NSArray<DDHBirthday *> *birthdays;
 @property (nonatomic, assign) CGFloat verticalAngle;
+@property (nonatomic, strong) DDHNodesCreator *nodesCreator;
+@property (nonatomic, strong) NSMutableArray<SCNNode *> *nodesToHide;
+@property (nonatomic, strong) NSPersonNameComponentsFormatter *nameFormatter;
 @end
 
 @implementation DDHSolarSystemViewController
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+  if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+    _nodesCreator = [[DDHNodesCreator alloc] init];
+    _nameFormatter = [[NSPersonNameComponentsFormatter alloc] init];
+    _nameFormatter.style = NSPersonNameComponentsFormatterStyleDefault;
+    _nodesToHide = [[NSMutableArray alloc] init];
+  }
+  return self;
+}
 
 - (DDHSolarSystemView *)contentView {
   return (DDHSolarSystemView *)self.view;
 }
 
 - (void)loadView {
-  DDHSolarSystemView *contentView = [[DDHSolarSystemView alloc] initWithFrame:CGRectZero options:nil];
+  DDHSolarSystemView *contentView = [[DDHSolarSystemView alloc] initWithNodesCreator:self.nodesCreator];
   [contentView.addButton addTarget:self action:@selector(add:) forControlEvents:UIControlEventTouchUpInside];
   self.view = contentView;
 }
@@ -42,10 +57,14 @@
 //  }];
 
   NSArray<DDHSceneMonth *> *sceneMonths = [DDHDateHelper sceneMonths];
-  NSArray<SCNNode *> *monthsNodes = [DDHNodesCreator monthNodesWithNumberOfDaysInYear:[self daysInYear] sceneMonth:sceneMonths];
+  NSArray<SCNNode *> *monthsNodes = [self.nodesCreator monthNodesWithNumberOfDaysInYear:[self daysInYear] sceneMonth:sceneMonths];
+  [self.nodesToHide addObjectsFromArray:monthsNodes];
   [monthsNodes enumerateObjectsUsingBlock:^(SCNNode * _Nonnull node, NSUInteger idx, BOOL * _Nonnull stop) {
     [[self contentView].scene.rootNode addChildNode:node];
   }];
+
+  UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+  [self.view addGestureRecognizer:tapRecognizer];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -66,6 +85,10 @@
   changeCameraPositionAnimation.removedOnCompletion = NO;
   changeCameraPositionAnimation.fillMode = kCAFillModeForwards;
   [cameraNode addAnimation:changeCameraPositionAnimation forKey:@"changeCameraPosition"];
+
+  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    cameraNode.position = endPosition;
+  });
 }
 
 // MARK: - Rotation
@@ -135,8 +158,8 @@
       material.diffuse.contents = [UIColor yellowColor];
       hostNode.geometry.materials = @[material];
     } else {
-      hostNode = [DDHNodesCreator birthdayHostNodeForDaysLeft:daysLeft numberOfDaysInYear:[self daysInYear] eulerAngles:SCNVector3Make(self.verticalAngle, [self contentView].cameraOrbit.eulerAngles.y, 0)];
-      [DDHNodesCreator addBirthdayNodeForBirthday:birthday toNode:hostNode];
+      hostNode = [self.nodesCreator birthdayHostNodeForDaysLeft:daysLeft numberOfDaysInYear:[self daysInYear] eulerAngles:SCNVector3Make(self.verticalAngle, [self contentView].cameraOrbit.eulerAngles.y, 0)];
+      [self.nodesCreator addBirthdayNodeForBirthday:birthday toNode:hostNode];
       [[self contentView].earthPath addChildNode:hostNode];
 
       birthdayNodes[birthday.uuid] = hostNode;
@@ -169,6 +192,7 @@
     if (granted) {
       [contactsManager fetchImportableContactsIgnoringExitingIds:@[] completionHandler:^(NSArray<CNContact *> * _Nonnull contacts) {
         NSArray<DDHBirthday *> *birthdays = [contactsManager birthdaysFromContacts:contacts];
+        self.birthdays = birthdays;
         dispatch_async(dispatch_get_main_queue(), ^{
           [self updateForBirthdays:birthdays];
         });
@@ -199,6 +223,92 @@
   } else {
     [self rotateToRotationAngle:rotationAngle];
   }
+}
+
+- (void)tap:(UITapGestureRecognizer *)sender {
+  CGPoint location = [sender locationInView:self.view];
+  NSArray<SCNHitTestResult *> *hits = [[self contentView] hitTest:location options:nil];
+  SCNHitTestResult *firstHit = [hits firstObject];
+  SCNNode *parentNode = firstHit.node.parentNode;
+  SCNVector3 parentPosition = parentNode.position;
+  NSLog(@"parent: %@", parentNode.name);
+  NSLog(@"parent: %lf %lf %lf", parentPosition.x, parentPosition.y, parentPosition.z);
+
+  NSMutableArray<DDHBirthday *> *selectedBirthdays = [[NSMutableArray alloc] init];
+  [self.birthdays enumerateObjectsUsingBlock:^(DDHBirthday * _Nonnull birthday, NSUInteger idx, BOOL * _Nonnull stop) {
+    if (birthday.daysLeft == [parentNode.name integerValue]) {
+      [selectedBirthdays addObject:birthday];
+    }
+  }];
+
+  NSLog(@"selectedBirthdays: %@", selectedBirthdays);
+
+  SCNVector3 parentRelativePosition = SCNVector3Make(parentPosition.x, 10, parentPosition.z + 10);
+  if (SCNVector3EqualToVector3([self contentView].cameraOrbit.childNodes.firstObject.position, parentRelativePosition)) {
+    return;
+  }
+
+  if ([selectedBirthdays count] > 0) {
+    [self.birthdayNodes enumerateKeysAndObjectsUsingBlock:^(NSUUID * _Nonnull key, SCNNode * _Nonnull node, BOOL * _Nonnull stop) {
+      if (node != parentNode) {
+        [self.nodesToHide addObject:node];
+      }
+    }];
+#warning "Add support for birthdays on same day"
+    //    DDHBirthdayDetailsView *birthdayDetail = [[DDHBirthdayDetailsView alloc] initWithFrame:[self contentView].bounds];
+    //    [birthdayDetail updateWithBirthday:selectedBirthdays.firstObject nameFormatter:self.nameFormatter];
+    //    [self contentView].overlaySKScene = birthdayDetail.scene;
+
+    [self animateCameraFrom:SCNVector3Zero to:parentRelativePosition];
+
+    [self.nodesToHide enumerateObjectsUsingBlock:^(SCNNode * _Nonnull node, NSUInteger idx, BOOL * _Nonnull stop) {
+      CABasicAnimation *changeCameraPositionAnimation = [self animationWithKeyPath:@"opacity" fromValue:@1 toValue:@0];
+      [node addAnimation:changeCameraPositionAnimation forKey:@"changeOpacity"];
+
+      node.opacity = 0;
+    }];
+
+  } else {
+    //    [self contentView].overlaySKScene = nil;
+
+    [self animateCameraFrom:SCNVector3Zero to:SCNVector3Make(0, 13, 35)];
+
+    [self.nodesToHide enumerateObjectsUsingBlock:^(SCNNode * _Nonnull node, NSUInteger idx, BOOL * _Nonnull stop) {
+      CABasicAnimation *changeCameraPositionAnimation = [self animationWithKeyPath:@"opacity" fromValue:@0 toValue:@1];
+      [node addAnimation:changeCameraPositionAnimation forKey:@"changeOpacity"];
+
+      node.opacity = 1;
+    }];
+
+    [self.birthdayNodes enumerateKeysAndObjectsUsingBlock:^(NSUUID * _Nonnull key, SCNNode * _Nonnull node, BOOL * _Nonnull stop) {
+      [self.nodesToHide removeObject:node];
+    }];
+  }
+}
+
+- (void)animateCameraFrom:(SCNVector3)startPosition to:(SCNVector3)endPosition {
+  SCNNode *cameraNode = [self contentView].cameraOrbit.childNodes.firstObject;
+  if (SCNVector3EqualToVector3(startPosition, SCNVector3Zero)) {
+    startPosition = cameraNode.position;
+  } else {
+    cameraNode.position = startPosition;
+  }
+
+  CABasicAnimation *changeCameraPositionAnimation = [self animationWithKeyPath:@"position" fromValue:[NSValue valueWithSCNVector3:startPosition] toValue:[NSValue valueWithSCNVector3:endPosition]];
+  [cameraNode addAnimation:changeCameraPositionAnimation forKey:@"changeCameraPosition"];
+
+  cameraNode.position = endPosition;
+}
+
+- (CABasicAnimation *)animationWithKeyPath:(NSString *)keyPath fromValue:(id)fromValue toValue:(id)toValue {
+  CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:keyPath];
+  animation.fromValue = fromValue;
+  animation.toValue = toValue;
+  animation.duration = 0.5;
+  animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+  animation.removedOnCompletion = NO;
+  animation.fillMode = kCAFillModeForwards;
+  return animation;
 }
 
 - (void)resetCamera {

@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		F283E7E82BEE7D4100F7244D /* DDHSceneMonth.m in Sources */ = {isa = PBXBuildFile; fileRef = F283E7E72BEE7D4100F7244D /* DDHSceneMonth.m */; };
 		F2D4E2112BE565A700432050 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D4E2102BE565A700432050 /* AppDelegate.m */; };
-		F2D4E2172BE565A700432050 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D4E2162BE565A700432050 /* ViewController.m */; };
 		F2D4E21A2BE565A700432050 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = F2D4E2192BE565A700432050 /* Base */; };
 		F2D4E21C2BE565A800432050 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F2D4E21B2BE565A800432050 /* Assets.xcassets */; };
 		F2D4E21F2BE565A800432050 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = F2D4E21E2BE565A800432050 /* Base */; };
@@ -31,8 +30,6 @@
 		F2D4E20C2BE565A700432050 /* SceneBirthdays.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SceneBirthdays.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2D4E20F2BE565A700432050 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F2D4E2102BE565A700432050 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		F2D4E2152BE565A700432050 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		F2D4E2162BE565A700432050 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		F2D4E2192BE565A700432050 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F2D4E21B2BE565A800432050 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F2D4E21E2BE565A800432050 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -91,8 +88,6 @@
 				F2D4E2102BE565A700432050 /* AppDelegate.m */,
 				F2D4E2542BE6094C00432050 /* SceneDelegate.h */,
 				F2D4E2552BE6094C00432050 /* SceneDelegate.m */,
-				F2D4E2152BE565A700432050 /* ViewController.h */,
-				F2D4E2162BE565A700432050 /* ViewController.m */,
 				F2D4E2622BE763F400432050 /* SolarSystem */,
 				F2D4E2612BE763E500432050 /* Model */,
 				F2D4E25E2BE6862700432050 /* UIImage+Extenstion.h */,
@@ -166,6 +161,7 @@
 				TargetAttributes = {
 					F2D4E20B2BE565A700432050 = {
 						CreatedOnToolsVersion = 15.3;
+						LastSwiftMigration = 1530;
 					};
 				};
 			};
@@ -206,7 +202,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F2D4E2172BE565A700432050 /* ViewController.m in Sources */,
 				F2D4E2112BE565A700432050 /* AppDelegate.m in Sources */,
 				F283E7E82BEE7D4100F7244D /* DDHSceneMonth.m in Sources */,
 				F2D4E2302BE5683200432050 /* DDHNodesCreator.m in Sources */,
@@ -364,6 +359,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Q6PD97MRX4;
@@ -382,6 +378,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = de.dasdom.SceneBirthdays;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -391,6 +389,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Q6PD97MRX4;
@@ -409,6 +408,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = de.dasdom.SceneBirthdays;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

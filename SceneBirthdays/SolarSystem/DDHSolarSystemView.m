@@ -11,15 +11,15 @@
 
 @implementation DDHSolarSystemView
 
-- (instancetype)initWithFrame:(CGRect)frame options:(nullable NSDictionary<NSString *,id> *)options {
-  if (self = [super initWithFrame:frame options:options]) {
-    _sun = [DDHNodesCreator sun];
-    
-    _cameraOrbit = [DDHNodesCreator cameraOrbit:SCNVector3Make(0, 0.2, 0) verticalCameraAngle:-0.6];
-    [_cameraOrbit addChildNode:[DDHNodesCreator directionalLightNode]];
-    [_cameraOrbit addChildNode:[DDHNodesCreator ambientLightNode]];
+- (instancetype)initWithNodesCreator:(DDHNodesCreator *)nodesCreator {
+  if (self = [super initWithFrame:CGRectZero options:nil]) {
+    _sun = nodesCreator.sun;
 
-    _earthPath = [DDHNodesCreator earthPath];
+    _cameraOrbit = [nodesCreator cameraOrbit:SCNVector3Make(0, 0.2, 0) verticalCameraAngle:-0.6];
+    [_cameraOrbit addChildNode:[nodesCreator directionalLightNode]];
+    [_cameraOrbit addChildNode:[nodesCreator ambientLightNode]];
+
+    _earthPath = [nodesCreator earthPath];
 
     SCNScene *scene = [[SCNScene alloc] init];
     [scene.rootNode addChildNode:_sun];
