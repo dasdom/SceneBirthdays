@@ -9,14 +9,15 @@
 #import "DDHNodesCreator.h"
 #import "DDHBirthday.h"
 #import "DDHDateHelper.h"
-#import "DDHBirthdayDetailsView.h"
+//#import "DDHBirthdayDetailsView.h"
 
 @interface DDHSolarSystemViewController () <CAAnimationDelegate>
 @property (nonatomic, assign) CGFloat startAngle;
-@property (nonatomic, strong) NSDictionary<NSUUID *, SCNNode *> *birthdayNodes;
+//@property (nonatomic, strong) NSDictionary<NSUUID *, SCNNode *> *birthdayNodes;
 @property (nonatomic, strong) NSArray<DDHBirthday *> *birthdays;
 @property (nonatomic, assign) CGFloat verticalAngle;
 @property (nonatomic, strong) DDHNodesCreator *nodesCreator;
+@property (nonatomic, strong) NSArray<SCNNode *> *hostNodes;
 @property (nonatomic, strong) NSMutableArray<SCNNode *> *nodesToHide;
 @property (nonatomic, strong) NSPersonNameComponentsFormatter *nameFormatter;
 @end
@@ -25,6 +26,7 @@
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
   if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+    _birthdays = @[];
     _nodesCreator = [[DDHNodesCreator alloc] init];
     _nameFormatter = [[NSPersonNameComponentsFormatter alloc] init];
     _nameFormatter.style = NSPersonNameComponentsFormatterStyleDefault;
@@ -100,10 +102,10 @@
   SCNVector3 cameraOrbitEulerAngles = [self contentView].cameraOrbit.eulerAngles;
   self.contentView.cameraOrbit.eulerAngles = SCNVector3Make(cameraOrbitEulerAngles.x, rotationAngle, cameraOrbitEulerAngles.z);
 
-  [self.birthdayNodes enumerateKeysAndObjectsUsingBlock:^(NSUUID * _Nonnull key, SCNNode * _Nonnull node, BOOL * _Nonnull stop) {
+  for (SCNNode *node in self.hostNodes) {
     SCNVector3 nodeEulerAngles = node.eulerAngles;
     node.eulerAngles = SCNVector3Make(nodeEulerAngles.x, rotationAngle, nodeEulerAngles.z);
-  }];
+  }
 }
 
 // MARK: - Animation
@@ -135,19 +137,21 @@
   birthdayRotate.toValue = [NSValue valueWithSCNVector3:SCNVector3Make(self.verticalAngle, rotationAngle, 0)];
   birthdayRotate.duration = animationDuration;
   birthdayRotate.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-  [self.birthdayNodes enumerateKeysAndObjectsUsingBlock:^(NSUUID * _Nonnull key, SCNNode * _Nonnull node, BOOL * _Nonnull stop) {
+
+  for (SCNNode *node in self.hostNodes) {
     [node addAnimation:birthdayRotate forKey:eulerAnglesKey];
-  }];
+  }
 }
 
 // MARK: - Update birthdays
 - (void)updateForBirthdays:(NSArray<DDHBirthday *> *)birthdays {
-  [self.birthdayNodes enumerateKeysAndObjectsUsingBlock:^(NSUUID * _Nonnull key, SCNNode * _Nonnull node, BOOL * _Nonnull stop) {
+  for (SCNNode *node in self.hostNodes) {
     [node removeFromParentNode];
-  }];
+  }
 
   NSMutableDictionary<NSNumber *, SCNNode *> *nodesForDaysLeft = [[NSMutableDictionary alloc] init];
-  NSMutableDictionary<NSUUID *, SCNNode *> *birthdayNodes = [[NSMutableDictionary alloc] initWithCapacity:[birthdays count]];
+//  NSMutableDictionary<NSUUID *, SCNNode *> *birthdayNodes = [[NSMutableDictionary alloc] initWithCapacity:[birthdays count]];
+  NSMutableArray<SCNNode *> *hostNodes = [[NSMutableArray alloc] initWithCapacity:[birthdays count]];
   [birthdays enumerateObjectsUsingBlock:^(DDHBirthday * _Nonnull birthday, NSUInteger idx, BOOL * _Nonnull stop) {
 
     NSInteger daysLeft = birthday.daysLeft;
@@ -159,14 +163,15 @@
       hostNode.geometry.materials = @[material];
     } else {
       hostNode = [self.nodesCreator birthdayHostNodeForDaysLeft:daysLeft numberOfDaysInYear:[self daysInYear] eulerAngles:SCNVector3Make(self.verticalAngle, [self contentView].cameraOrbit.eulerAngles.y, 0)];
+      [hostNodes addObject:hostNode];
+    }
       [self.nodesCreator addBirthdayNodeForBirthday:birthday toNode:hostNode];
       [[self contentView].earthPath addChildNode:hostNode];
 
-      birthdayNodes[birthday.uuid] = hostNode;
       nodesForDaysLeft[@(daysLeft)] = hostNode;
-    }
+//    }
   }];
-  self.birthdayNodes = birthdayNodes;
+  self.hostNodes = [hostNodes copy];
 }
 
 - (NSInteger)daysInYear {
@@ -192,9 +197,9 @@
     if (granted) {
       [contactsManager fetchImportableContactsIgnoringExitingIds:@[] completionHandler:^(NSArray<CNContact *> * _Nonnull contacts) {
         NSArray<DDHBirthday *> *birthdays = [contactsManager birthdaysFromContacts:contacts];
-        self.birthdays = birthdays;
+        self.birthdays = [self.birthdays arrayByAddingObjectsFromArray:birthdays];
         dispatch_async(dispatch_get_main_queue(), ^{
-          [self updateForBirthdays:birthdays];
+          [self updateForBirthdays:self.birthdays];
         });
       }];
     }
@@ -249,11 +254,11 @@
   }
 
   if ([selectedBirthdays count] > 0) {
-    [self.birthdayNodes enumerateKeysAndObjectsUsingBlock:^(NSUUID * _Nonnull key, SCNNode * _Nonnull node, BOOL * _Nonnull stop) {
+    for (SCNNode *node in self.hostNodes) {
       if (node != parentNode) {
         [self.nodesToHide addObject:node];
       }
-    }];
+    }
 #warning "Add support for birthdays on same day"
     //    DDHBirthdayDetailsView *birthdayDetail = [[DDHBirthdayDetailsView alloc] initWithFrame:[self contentView].bounds];
     //    [birthdayDetail updateWithBirthday:selectedBirthdays.firstObject nameFormatter:self.nameFormatter];
@@ -280,9 +285,9 @@
       node.opacity = 1;
     }];
 
-    [self.birthdayNodes enumerateKeysAndObjectsUsingBlock:^(NSUUID * _Nonnull key, SCNNode * _Nonnull node, BOOL * _Nonnull stop) {
+    for (SCNNode *node in self.hostNodes) {
       [self.nodesToHide removeObject:node];
-    }];
+    }
   }
 }
 
@@ -317,7 +322,7 @@
   [[self contentView].sun runAction:[SCNAction scaleTo:1 duration:duration]];
   [self runRotateToZeroActionForNodes:@[[self contentView].cameraOrbit] withDuration:duration];
 
-  [self runRotateToZeroActionForNodes:self.birthdayNodes.allValues withDuration:duration];
+  [self runRotateToZeroActionForNodes:self.hostNodes withDuration:duration];
 }
 
 - (void)runRotateToZeroActionForNodes:(NSArray<SCNNode *> *)nodes withDuration:(NSTimeInterval)duration {

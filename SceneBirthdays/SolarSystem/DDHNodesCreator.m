@@ -121,29 +121,53 @@ const CGFloat scaledEarthPathRadius = earthOrbit * orbitScaleFactor;
 }
 
 - (SCNNode *)addBirthdayNodeForBirthday:(DDHBirthday *)birthday toNode:(SCNNode *)node {
-  CGFloat zPosFactor = -0.001;
-  NSInteger index = [node.childNodes count];
-  SCNNode *birthdayNode = [self birthdayIndicatorForBirthday:birthday zPos:zPosFactor * index];
+  SCNNode *birthdayNode = [self birthdayIndicatorForBirthday:birthday];
   [node addChildNode:birthdayNode];
+  [self positionChildNodesInNode:node];
   return birthdayNode;
+}
+
+- (void)positionChildNodesInNode:(SCNNode *)node {
+  CGFloat zPosFactor = -0.001;
+  NSInteger numberOfChilds = [node.childNodes count];
+  CGFloat radius;
+  if (numberOfChilds < 2) {
+    radius = [self birthdayIndicatorWidth]/2;
+  } else {
+    radius = [self birthdayIndicatorWidth]/4;
+  }
+  [node.childNodes enumerateObjectsUsingBlock:^(SCNNode * _Nonnull childNode, NSUInteger idx, BOOL * _Nonnull stop) {
+    if (numberOfChilds < 2) {
+      ((SCNPlane*)childNode.geometry).width = [self birthdayIndicatorWidth];
+      ((SCNPlane*)childNode.geometry).height = [self birthdayIndicatorWidth];
+    } else {
+      ((SCNPlane*)childNode.geometry).width = [self birthdayIndicatorWidth]/2;
+      ((SCNPlane*)childNode.geometry).height = [self birthdayIndicatorWidth]/2;
+    }
+    CGFloat angle = 360.0/numberOfChilds * idx + 180;
+    CGFloat x = radius * sin(angle * M_PI / 180.0);
+    CGFloat y = radius * cos(angle * M_PI / 180.0);
+    childNode.position = SCNVector3Make(x, y + 2 * radius + 0.4, zPosFactor * idx);
+  }];
 }
 
 - (CGFloat)birthdayIndicatorWidth {
   return 6;
 }
 
-- (SCNNode *)birthdayIndicatorForBirthday:(DDHBirthday *)birthday zPos:(CGFloat)zPos {
+- (SCNNode *)birthdayIndicatorForBirthday:(DDHBirthday *)birthday {
   SCNMaterial *material = [[SCNMaterial alloc] init];
   UIImage *image = [UIImage imageWithData:birthday.imageData];
   UIImage *roundedImage = [image roundedWithColor:[UIColor whiteColor] width:10 targetSize:CGSizeMake(500, 500)];
   material.diffuse.contents = roundedImage;
 
-  SCNPlane *plane = [SCNPlane planeWithWidth:[self birthdayIndicatorWidth] height:[self birthdayIndicatorWidth]];
-  plane.cornerRadius = [self birthdayIndicatorWidth]/2;
+  SCNPlane *plane = [SCNPlane planeWithWidth:[self birthdayIndicatorWidth]/2 height:[self birthdayIndicatorWidth]/2];
+  plane.cornerRadius = [self birthdayIndicatorWidth]/4;
   plane.materials = @[material];
 
   SCNNode *node = [SCNNode nodeWithGeometry:plane];
-  node.position = SCNVector3Make(0, [self birthdayIndicatorWidth]/2 + 0.4, zPos);
+//  CGFloat zPosFactor = -0.001;
+//  node.position = SCNVector3Make(0, [self birthdayIndicatorWidth]/2 + 0.4, zPosFactor * index);
   node.categoryBitMask = 1 << 0;
 
   SCNMaterial *textMaterial = [[SCNMaterial alloc] init];
