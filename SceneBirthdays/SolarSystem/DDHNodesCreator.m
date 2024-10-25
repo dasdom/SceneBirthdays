@@ -128,33 +128,6 @@ const CGFloat scaledEarthPathRadius = earthOrbit * orbitScaleFactor;
     return birthdayNodes;
 }
 
-//- (void)positionChildNodesInNode:(SCNNode *)node {
-//  CGFloat zPosFactor = -0.001;
-//  NSInteger numberOfChilds = [node.childNodes count];
-//
-//  CGFloat radius;
-//  if (numberOfChilds < 2) {
-//    radius = [self birthdayIndicatorWidth]/2;
-//  } else {
-//    radius = [self birthdayIndicatorWidth]/4;
-//  }
-//
-//  [node.childNodes enumerateObjectsUsingBlock:^(SCNNode * _Nonnull childNode, NSUInteger idx, BOOL * _Nonnull stop) {
-//    if (numberOfChilds < 2) {
-//      ((SCNPlane*)childNode.geometry).width = [self birthdayIndicatorWidth];
-//      ((SCNPlane*)childNode.geometry).height = [self birthdayIndicatorWidth];
-//    } else {
-//      ((SCNPlane*)childNode.geometry).width = [self birthdayIndicatorWidth]/2;
-//      ((SCNPlane*)childNode.geometry).height = [self birthdayIndicatorWidth]/2;
-//    }
-//
-//    CGFloat angle = 360.0/numberOfChilds * idx + 180;
-//    CGFloat x = radius * sin(angle * M_PI / 180.0);
-//    CGFloat y = radius * cos(angle * M_PI / 180.0);
-//    childNode.position = SCNVector3Make(x, y + 2 * radius + 0.4, zPosFactor * idx);
-//  }];
-//}
-
 - (CGFloat)birthdayIndicatorWidth {
     return 6;
 }
@@ -216,7 +189,7 @@ const CGFloat scaledEarthPathRadius = earthOrbit * orbitScaleFactor;
     sphere.materials = @[dotMaterial];
 
     NSMutableArray<SCNNode *> *nodes = [[NSMutableArray alloc] init];
-    [@[@7, @14, @22, @52, @100] enumerateObjectsUsingBlock:^(id  _Nonnull daysLeft, NSUInteger idx, BOOL * _Nonnull stop) {
+    for (NSNumber *daysLeft in @[@7, @14, @22, @52, @100]) {
         SCNNode *dotNode = [SCNNode nodeWithGeometry:sphere];
 
         CGFloat angle = 360.0/numberOfDaysInYear * [daysLeft integerValue];
@@ -235,7 +208,7 @@ const CGFloat scaledEarthPathRadius = earthOrbit * orbitScaleFactor;
         [dotNode addChildNode:textNode];
 
         [nodes addObject:dotNode];
-    }];
+    }
 
     return [nodes copy];
 }
@@ -255,7 +228,8 @@ const CGFloat scaledEarthPathRadius = earthOrbit * orbitScaleFactor;
 - (NSArray<SCNNode *> *)monthNodesWithNumberOfDaysInYear:(NSInteger)numberOfDaysInYear sceneMonth:(NSArray<DDHSceneMonth *> *)sceneMonths {
 
     NSMutableArray<SCNNode *> *nodes = [[NSMutableArray alloc] initWithCapacity:[sceneMonths count]];
-    [sceneMonths enumerateObjectsUsingBlock:^(DDHSceneMonth * _Nonnull sceneMonth, NSUInteger idx, BOOL * _Nonnull stop) {
+
+    for (DDHSceneMonth *sceneMonth in sceneMonths) {
         //    UIBezierPath *path = [[UIBezierPath alloc] init];
 
         CGFloat angle1 = 360.0/numberOfDaysInYear * sceneMonth.start;
@@ -317,7 +291,7 @@ const CGFloat scaledEarthPathRadius = earthOrbit * orbitScaleFactor;
 
         [nodes addObject:textNode];
         [nodes addObject:dotNode];
-    }];
+    }
 
     return nodes;
 }
