@@ -13,51 +13,51 @@
 
 @implementation DDHContactsManager
 - (instancetype)init {
-  if (self = [super init]) {
-    _contactsStore = [[CNContactStore alloc] init];
-  }
-  return self;
+    if (self = [super init]) {
+        _contactsStore = [[CNContactStore alloc] init];
+    }
+    return self;
 }
 
 - (void)requestContactsAccess:(void(^)(BOOL granted))completionHandler {
-  [self.contactsStore requestAccessForEntityType:CNEntityTypeContacts completionHandler:^(BOOL granted, NSError * _Nullable error) {
-    completionHandler(granted);
-  }];
+    [self.contactsStore requestAccessForEntityType:CNEntityTypeContacts completionHandler:^(BOOL granted, NSError * _Nullable error) {
+        completionHandler(granted);
+    }];
 }
 
 - (BOOL)isAuthorised {
-  return [CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts] == CNAuthorizationStatusAuthorized;
+    return [CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts] == CNAuthorizationStatusAuthorized;
 }
 
 - (void)fetchImportableContactsIgnoringExitingIds:(NSArray<NSString *> *)existingIds completionHandler:(void(^)(NSArray<CNContact *> *contacts))completionHandler {
-
-  CNContactFetchRequest *fetchRequest = [[CNContactFetchRequest alloc] initWithKeysToFetch:@[
-    CNContactGivenNameKey,
-    CNContactFamilyNameKey,
-    CNContactBirthdayKey,
-    CNContactThumbnailImageDataKey
-  ]];
-
-  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-    NSError *fetchError;
-    NSMutableArray<CNContact *> *contacts = [[NSMutableArray alloc] init];
-    [self.contactsStore enumerateContactsWithFetchRequest:fetchRequest error:&fetchError usingBlock:^(CNContact * _Nonnull contact, BOOL * _Nonnull stop) {
-      if (contact.birthday.date != nil &&
-          NO == [existingIds containsObject:contact.identifier]) {
-        [contacts addObject:contact];
-      }
-    }];
-    completionHandler(contacts);
-  });
+    
+    CNContactFetchRequest *fetchRequest = [[CNContactFetchRequest alloc] initWithKeysToFetch:@[
+        CNContactGivenNameKey,
+        CNContactFamilyNameKey,
+        CNContactBirthdayKey,
+        CNContactThumbnailImageDataKey
+    ]];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        NSError *fetchError;
+        NSMutableArray<CNContact *> *contacts = [[NSMutableArray alloc] init];
+        [self.contactsStore enumerateContactsWithFetchRequest:fetchRequest error:&fetchError usingBlock:^(CNContact * _Nonnull contact, BOOL * _Nonnull stop) {
+            if (contact.birthday.date != nil &&
+                NO == [existingIds containsObject:contact.identifier]) {
+                [contacts addObject:contact];
+            }
+        }];
+        completionHandler(contacts);
+    });
 }
 
 - (NSArray<DDHBirthday *> *)birthdaysFromContacts:(NSArray<CNContact *> *)contacts {
-  NSMutableArray<DDHBirthday *> *birthdays = [NSMutableArray arrayWithCapacity:[contacts count]];
-  [contacts enumerateObjectsUsingBlock:^(CNContact * _Nonnull contact, NSUInteger idx, BOOL * _Nonnull stop) {
-    DDHBirthday *birthday = [[DDHBirthday alloc] initWithContact:contact];
-    [birthdays addObject:birthday];
-  }];
-  return birthdays;
+    NSMutableArray<DDHBirthday *> *birthdays = [NSMutableArray arrayWithCapacity:[contacts count]];
+    [contacts enumerateObjectsUsingBlock:^(CNContact * _Nonnull contact, NSUInteger idx, BOOL * _Nonnull stop) {
+        DDHBirthday *birthday = [[DDHBirthday alloc] initWithContact:contact];
+        [birthdays addObject:birthday];
+    }];
+    return birthdays;
 }
 
 @end

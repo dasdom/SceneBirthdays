@@ -7,11 +7,11 @@
 
 @implementation DDHSceneMonth
 - (instancetype)initWithName:(NSString *)name start:(NSInteger)start end:(NSInteger)end {
-  if (self = [super init]) {
-    _name = name;
-    _start = start;
-    _end = end;
-  }
-  return self;
+    if (self = [super init]) {
+        _name = name;
+        _start = start;
+        _end = end;
+    }
+    return self;
 }
 @end

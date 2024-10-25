@@ -1,5 +1,5 @@
 //  Created by Dominik Hauser on 03.05.24.
-//  
+//
 //
 
 
@@ -25,324 +25,324 @@
 @implementation DDHSolarSystemViewController
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-  if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-    _birthdays = @[];
-    _nodesCreator = [[DDHNodesCreator alloc] init];
-    _nameFormatter = [[NSPersonNameComponentsFormatter alloc] init];
-    _nameFormatter.style = NSPersonNameComponentsFormatterStyleDefault;
-    _nodesToHide = [[NSMutableArray alloc] init];
-  }
-  return self;
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        _birthdays = @[];
+        _nodesCreator = [[DDHNodesCreator alloc] init];
+        _nameFormatter = [[NSPersonNameComponentsFormatter alloc] init];
+        _nameFormatter.style = NSPersonNameComponentsFormatterStyleDefault;
+        _nodesToHide = [[NSMutableArray alloc] init];
+    }
+    return self;
 }
 
 - (DDHSolarSystemView *)contentView {
-  return (DDHSolarSystemView *)self.view;
+    return (DDHSolarSystemView *)self.view;
 }
 
 - (void)loadView {
-  DDHSolarSystemView *contentView = [[DDHSolarSystemView alloc] initWithNodesCreator:self.nodesCreator];
-  [contentView.addButton addTarget:self action:@selector(add:) forControlEvents:UIControlEventTouchUpInside];
-  self.view = contentView;
+    DDHSolarSystemView *contentView = [[DDHSolarSystemView alloc] initWithNodesCreator:self.nodesCreator];
+    [contentView.addButton addTarget:self action:@selector(add:) forControlEvents:UIControlEventTouchUpInside];
+    self.view = contentView;
 }
 
 - (void)viewDidLoad {
-  [super viewDidLoad];
+    [super viewDidLoad];
 
-  self.verticalAngle = -0.5;
+    self.verticalAngle = -0.5;
 
-  UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
-  [self.view addGestureRecognizer:panRecognizer];
+    UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
+    [self.view addGestureRecognizer:panRecognizer];
 
-//  NSArray<SCNNode *> *intervalNodes = [DDHNodesCreator significantIntervalsIndicatorNodesWithNumberOfDaysInYear:[self daysInYear]];
-//  [intervalNodes enumerateObjectsUsingBlock:^(SCNNode * _Nonnull node, NSUInteger idx, BOOL * _Nonnull stop) {
-//    [[self contentView].scene.rootNode addChildNode:node];
-//  }];
+    //  NSArray<SCNNode *> *intervalNodes = [DDHNodesCreator significantIntervalsIndicatorNodesWithNumberOfDaysInYear:[self daysInYear]];
+    //  [intervalNodes enumerateObjectsUsingBlock:^(SCNNode * _Nonnull node, NSUInteger idx, BOOL * _Nonnull stop) {
+    //    [[self contentView].scene.rootNode addChildNode:node];
+    //  }];
 
-  NSArray<DDHSceneMonth *> *sceneMonths = [DDHDateHelper sceneMonths];
-  NSArray<SCNNode *> *monthsNodes = [self.nodesCreator monthNodesWithNumberOfDaysInYear:[self daysInYear] sceneMonth:sceneMonths];
-  [self.nodesToHide addObjectsFromArray:monthsNodes];
-  [monthsNodes enumerateObjectsUsingBlock:^(SCNNode * _Nonnull node, NSUInteger idx, BOOL * _Nonnull stop) {
-    [[self contentView].scene.rootNode addChildNode:node];
-  }];
+    NSArray<DDHSceneMonth *> *sceneMonths = [DDHDateHelper sceneMonths];
+    NSArray<SCNNode *> *monthsNodes = [self.nodesCreator monthNodesWithNumberOfDaysInYear:[self daysInYear] sceneMonth:sceneMonths];
+    [self.nodesToHide addObjectsFromArray:monthsNodes];
+    [monthsNodes enumerateObjectsUsingBlock:^(SCNNode * _Nonnull node, NSUInteger idx, BOOL * _Nonnull stop) {
+        [[self contentView].scene.rootNode addChildNode:node];
+    }];
 
-  UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
-  [self.view addGestureRecognizer:tapRecognizer];
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+    [self.view addGestureRecognizer:tapRecognizer];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-  [super viewDidAppear:animated];
+    [super viewDidAppear:animated];
 
-  SCNVector3 startPosition = SCNVector3Make(0, 0.2, 0.3);
-  SCNVector3 endPosition = SCNVector3Make(0, 13, 35);
+    SCNVector3 startPosition = SCNVector3Make(0, 0.2, 0.3);
+    SCNVector3 endPosition = SCNVector3Make(0, 13, 35);
 
-  SCNNode *cameraNode = [self contentView].cameraOrbit.childNodes.firstObject;
-  cameraNode.position = startPosition;
+    SCNNode *cameraNode = [self contentView].cameraOrbit.childNodes.firstObject;
+    cameraNode.position = startPosition;
 
-  CABasicAnimation *changeCameraPositionAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
-  changeCameraPositionAnimation.fromValue = [NSValue valueWithSCNVector3:startPosition];
-  changeCameraPositionAnimation.toValue = [NSValue valueWithSCNVector3:endPosition];
-  changeCameraPositionAnimation.duration = 1;
-  changeCameraPositionAnimation.beginTime = CACurrentMediaTime() + 0.6;
-  changeCameraPositionAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-  changeCameraPositionAnimation.removedOnCompletion = NO;
-  changeCameraPositionAnimation.fillMode = kCAFillModeForwards;
-  [cameraNode addAnimation:changeCameraPositionAnimation forKey:@"changeCameraPosition"];
+    CABasicAnimation *changeCameraPositionAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
+    changeCameraPositionAnimation.fromValue = [NSValue valueWithSCNVector3:startPosition];
+    changeCameraPositionAnimation.toValue = [NSValue valueWithSCNVector3:endPosition];
+    changeCameraPositionAnimation.duration = 1;
+    changeCameraPositionAnimation.beginTime = CACurrentMediaTime() + 0.6;
+    changeCameraPositionAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    changeCameraPositionAnimation.removedOnCompletion = NO;
+    changeCameraPositionAnimation.fillMode = kCAFillModeForwards;
+    [cameraNode addAnimation:changeCameraPositionAnimation forKey:@"changeCameraPosition"];
 
-  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-    cameraNode.position = endPosition;
-  });
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        cameraNode.position = endPosition;
+    });
 }
 
 // MARK: - Rotation
 - (void)rotateToRotationAngle:(CGFloat)rotationAngle {
-  [self updateCameraAndBirthdayIndicatorsWithRotationAngle:rotationAngle];
+    [self updateCameraAndBirthdayIndicatorsWithRotationAngle:rotationAngle];
 }
 
 - (void)updateCameraAndBirthdayIndicatorsWithRotationAngle:(CGFloat)rotationAngle {
-  SCNVector3 cameraOrbitEulerAngles = [self contentView].cameraOrbit.eulerAngles;
-  self.contentView.cameraOrbit.eulerAngles = SCNVector3Make(cameraOrbitEulerAngles.x, rotationAngle, cameraOrbitEulerAngles.z);
+    SCNVector3 cameraOrbitEulerAngles = [self contentView].cameraOrbit.eulerAngles;
+    self.contentView.cameraOrbit.eulerAngles = SCNVector3Make(cameraOrbitEulerAngles.x, rotationAngle, cameraOrbitEulerAngles.z);
 
-  for (SCNNode *node in self.hostNodes) {
-    SCNVector3 nodeEulerAngles = node.eulerAngles;
-    node.eulerAngles = SCNVector3Make(nodeEulerAngles.x, rotationAngle, nodeEulerAngles.z);
-  }
+    for (SCNNode *node in self.hostNodes) {
+        SCNVector3 nodeEulerAngles = node.eulerAngles;
+        node.eulerAngles = SCNVector3Make(nodeEulerAngles.x, rotationAngle, nodeEulerAngles.z);
+    }
 }
 
 // MARK: - Animation
 - (CFTimeInterval)animationDurationForMovingFromStartAngle:(CGFloat)startAngle toEndAngle:(CGFloat)endAngle {
-  CGFloat angleDistance = fabs(endAngle - startAngle);
-  return 1.8 * angleDistance / (2 * M_PI);
+    CGFloat angleDistance = fabs(endAngle - startAngle);
+    return 1.8 * angleDistance / (2 * M_PI);
 }
 
 - (void)animateCameraAndBirthdaysToRotationAngle:(CGFloat)rotationAngle animationDuration:(CFTimeInterval)animationDuration {
-  self.view.userInteractionEnabled = NO;
-  DDHSolarSystemView *contentView = [self contentView];
-  CGFloat currentAngle = contentView.cameraOrbit.presentationNode.eulerAngles.y;
-  CGFloat angleDistance = contentView.cameraOrbit.eulerAngles.y;
-  if (animationDuration < 0.01) {
-    animationDuration = [self animationDurationForMovingFromStartAngle:currentAngle toEndAngle:angleDistance];
-  }
+    self.view.userInteractionEnabled = NO;
+    DDHSolarSystemView *contentView = [self contentView];
+    CGFloat currentAngle = contentView.cameraOrbit.presentationNode.eulerAngles.y;
+    CGFloat angleDistance = contentView.cameraOrbit.eulerAngles.y;
+    if (animationDuration < 0.01) {
+        animationDuration = [self animationDurationForMovingFromStartAngle:currentAngle toEndAngle:angleDistance];
+    }
 
-  NSString *eulerAnglesKey = @"eulerAngles";
-  CABasicAnimation *rotate = [CABasicAnimation animationWithKeyPath:eulerAnglesKey];
-  rotate.fromValue = [NSValue valueWithSCNVector3:SCNVector3Make(0, currentAngle, 0)];
-  rotate.toValue = [NSValue valueWithSCNVector3:SCNVector3Make(0, rotationAngle, 0)];
-  rotate.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-  rotate.duration = animationDuration;
-  rotate.delegate = self;
-  [contentView.cameraOrbit addAnimation:rotate forKey:eulerAnglesKey];
+    NSString *eulerAnglesKey = @"eulerAngles";
+    CABasicAnimation *rotate = [CABasicAnimation animationWithKeyPath:eulerAnglesKey];
+    rotate.fromValue = [NSValue valueWithSCNVector3:SCNVector3Make(0, currentAngle, 0)];
+    rotate.toValue = [NSValue valueWithSCNVector3:SCNVector3Make(0, rotationAngle, 0)];
+    rotate.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    rotate.duration = animationDuration;
+    rotate.delegate = self;
+    [contentView.cameraOrbit addAnimation:rotate forKey:eulerAnglesKey];
 
-  CABasicAnimation *birthdayRotate = [CABasicAnimation animationWithKeyPath:eulerAnglesKey];
-  birthdayRotate.fromValue = [NSValue valueWithSCNVector3:SCNVector3Make(self.verticalAngle, rotationAngle, 0)];
-  birthdayRotate.toValue = [NSValue valueWithSCNVector3:SCNVector3Make(self.verticalAngle, rotationAngle, 0)];
-  birthdayRotate.duration = animationDuration;
-  birthdayRotate.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    CABasicAnimation *birthdayRotate = [CABasicAnimation animationWithKeyPath:eulerAnglesKey];
+    birthdayRotate.fromValue = [NSValue valueWithSCNVector3:SCNVector3Make(self.verticalAngle, rotationAngle, 0)];
+    birthdayRotate.toValue = [NSValue valueWithSCNVector3:SCNVector3Make(self.verticalAngle, rotationAngle, 0)];
+    birthdayRotate.duration = animationDuration;
+    birthdayRotate.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
 
-  for (SCNNode *node in self.hostNodes) {
-    [node addAnimation:birthdayRotate forKey:eulerAnglesKey];
-  }
+    for (SCNNode *node in self.hostNodes) {
+        [node addAnimation:birthdayRotate forKey:eulerAnglesKey];
+    }
 }
 
 // MARK: - Update birthdays
 - (void)updateForBirthdays:(NSArray<DDHBirthday *> *)birthdays {
-  for (SCNNode *node in self.hostNodes) {
-    [node removeFromParentNode];
-  }
-
-  NSMutableDictionary<NSNumber *, SCNNode *> *nodesForDaysLeft = [[NSMutableDictionary alloc] init];
-  NSMutableDictionary<NSNumber *, NSMutableArray<DDHBirthday *> *> *birthdayNodes = [[NSMutableDictionary alloc] initWithCapacity:[birthdays count]];
-  NSMutableArray<SCNNode *> *hostNodes = [[NSMutableArray alloc] initWithCapacity:[birthdays count]];
-
-  [birthdays enumerateObjectsUsingBlock:^(DDHBirthday * _Nonnull birthday, NSUInteger idx, BOOL * _Nonnull stop) {
-
-    NSInteger daysLeft = birthday.daysLeft;
-
-    NSMutableArray<DDHBirthday *> *birthdaysForDaysLeft = birthdayNodes[@(daysLeft)];
-    if (nil == birthdaysForDaysLeft) {
-      birthdaysForDaysLeft = [[NSMutableArray alloc] init];
+    for (SCNNode *node in self.hostNodes) {
+        [node removeFromParentNode];
     }
 
-    SCNNode *hostNode = nodesForDaysLeft[@(daysLeft)];
-    if (nil != hostNode) {
-      SCNMaterial *material = [[SCNMaterial alloc] init];
-      material.diffuse.contents = [UIColor yellowColor];
-      hostNode.geometry.materials = @[material];
-    } else {
-      hostNode = [self.nodesCreator birthdayHostNodeForDaysLeft:daysLeft numberOfDaysInYear:[self daysInYear] eulerAngles:SCNVector3Make(self.verticalAngle, [self contentView].cameraOrbit.eulerAngles.y, 0)];
-      [hostNodes addObject:hostNode];
-      [[self contentView].earthPath addChildNode:hostNode];
-    }
+    NSMutableDictionary<NSNumber *, SCNNode *> *nodesForDaysLeft = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary<NSNumber *, NSMutableArray<DDHBirthday *> *> *birthdayNodes = [[NSMutableDictionary alloc] initWithCapacity:[birthdays count]];
+    NSMutableArray<SCNNode *> *hostNodes = [[NSMutableArray alloc] initWithCapacity:[birthdays count]];
 
-    nodesForDaysLeft[@(daysLeft)] = hostNode;
+    [birthdays enumerateObjectsUsingBlock:^(DDHBirthday * _Nonnull birthday, NSUInteger idx, BOOL * _Nonnull stop) {
 
-    [birthdaysForDaysLeft addObject:birthday];
-    birthdayNodes[@(daysLeft)] = birthdaysForDaysLeft;
-    //    }
-  }];
+        NSInteger daysLeft = birthday.daysLeft;
 
-  [nodesForDaysLeft enumerateKeysAndObjectsUsingBlock:^(NSNumber * _Nonnull daysLeft, SCNNode * _Nonnull node, BOOL * _Nonnull stop) {
-    NSArray<DDHBirthday *> *birthdays = birthdayNodes[daysLeft];
-    [self.nodesCreator addBirthdayNodeForBirthdays:birthdays toNode:node];
-  }];
+        NSMutableArray<DDHBirthday *> *birthdaysForDaysLeft = birthdayNodes[@(daysLeft)];
+        if (nil == birthdaysForDaysLeft) {
+            birthdaysForDaysLeft = [[NSMutableArray alloc] init];
+        }
 
-  self.hostNodes = [hostNodes copy];
+        SCNNode *hostNode = nodesForDaysLeft[@(daysLeft)];
+        if (nil != hostNode) {
+            SCNMaterial *material = [[SCNMaterial alloc] init];
+            material.diffuse.contents = [UIColor yellowColor];
+            hostNode.geometry.materials = @[material];
+        } else {
+            hostNode = [self.nodesCreator birthdayHostNodeForDaysLeft:daysLeft numberOfDaysInYear:[self daysInYear] eulerAngles:SCNVector3Make(self.verticalAngle, [self contentView].cameraOrbit.eulerAngles.y, 0)];
+            [hostNodes addObject:hostNode];
+            [[self contentView].earthPath addChildNode:hostNode];
+        }
+
+        nodesForDaysLeft[@(daysLeft)] = hostNode;
+
+        [birthdaysForDaysLeft addObject:birthday];
+        birthdayNodes[@(daysLeft)] = birthdaysForDaysLeft;
+        //    }
+    }];
+
+    [nodesForDaysLeft enumerateKeysAndObjectsUsingBlock:^(NSNumber * _Nonnull daysLeft, SCNNode * _Nonnull node, BOOL * _Nonnull stop) {
+        NSArray<DDHBirthday *> *birthdays = birthdayNodes[daysLeft];
+        [self.nodesCreator addBirthdayNodeForBirthdays:birthdays toNode:node];
+    }];
+
+    self.hostNodes = [hostNodes copy];
 }
 
 - (NSInteger)daysInYear {
-  NSDate *now = [NSDate now];
+    NSDate *now = [NSDate now];
 
-  NSDate *dateInOneYear = [NSCalendar.currentCalendar dateByAddingUnit:NSCalendarUnitYear value:1 toDate:now options:0];
-  if (nil == dateInOneYear) {
-    return 365;
-  }
-  NSInteger numberOfDays = [NSCalendar.currentCalendar components:NSCalendarUnitDay fromDate:now toDate:dateInOneYear options:0].day;
-  return MAX(numberOfDays, 365);
+    NSDate *dateInOneYear = [NSCalendar.currentCalendar dateByAddingUnit:NSCalendarUnitYear value:1 toDate:now options:0];
+    if (nil == dateInOneYear) {
+        return 365;
+    }
+    NSInteger numberOfDays = [NSCalendar.currentCalendar components:NSCalendarUnitDay fromDate:now toDate:dateInOneYear options:0].day;
+    return MAX(numberOfDays, 365);
 }
 
 // MARK: - CAAnimationDelegate
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
-  self.view.userInteractionEnabled = YES;
+    self.view.userInteractionEnabled = YES;
 }
 
 // MARK: - Actions
 - (void)add:(UIButton *)sender {
-  DDHContactsManager *contactsManager = [[DDHContactsManager alloc] init];
-  [contactsManager requestContactsAccess:^(BOOL granted) {
-    if (granted) {
-      [contactsManager fetchImportableContactsIgnoringExitingIds:@[] completionHandler:^(NSArray<CNContact *> * _Nonnull contacts) {
-        NSArray<DDHBirthday *> *birthdays = [contactsManager birthdaysFromContacts:contacts];
-        self.birthdays = [self.birthdays arrayByAddingObjectsFromArray:birthdays];
-        dispatch_async(dispatch_get_main_queue(), ^{
-          [self updateForBirthdays:self.birthdays];
-        });
-      }];
-    }
-  }];
+    DDHContactsManager *contactsManager = [[DDHContactsManager alloc] init];
+    [contactsManager requestContactsAccess:^(BOOL granted) {
+        if (granted) {
+            [contactsManager fetchImportableContactsIgnoringExitingIds:@[] completionHandler:^(NSArray<CNContact *> * _Nonnull contacts) {
+                NSArray<DDHBirthday *> *birthdays = [contactsManager birthdaysFromContacts:contacts];
+                self.birthdays = [self.birthdays arrayByAddingObjectsFromArray:birthdays];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self updateForBirthdays:self.birthdays];
+                });
+            }];
+        }
+    }];
 }
 
 - (void)pan:(UIPanGestureRecognizer *)sender {
-  CGPoint translation = [sender translationInView:self.view];
+    CGPoint translation = [sender translationInView:self.view];
 
-  CGFloat angle = translation.x / self.view.bounds.size.width * M_PI;
+    CGFloat angle = translation.x / self.view.bounds.size.width * M_PI;
 
-  if (sender.state == UIGestureRecognizerStateBegan) {
-    self.startAngle = self.contentView.cameraOrbit.eulerAngles.y;
-  }
-
-  CGFloat rotationAngle = MIN(2 * M_PI, self.startAngle - angle);
-  
-  if (sender.state == UIGestureRecognizerStateEnded) {
-    if ([self contentView].cameraOrbit.eulerAngles.y < 0) {
-      [self resetCamera];
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        self.startAngle = self.contentView.cameraOrbit.eulerAngles.y;
     }
-  } else if (rotationAngle < 0) {
-    [self rotateToRotationAngle:rotationAngle/8];
-    CGFloat scale = 1 - rotationAngle;
-    [self contentView].sun.scale = SCNVector3Make(scale, scale, scale);
-  } else {
-    [self rotateToRotationAngle:rotationAngle];
-  }
+
+    CGFloat rotationAngle = MIN(2 * M_PI, self.startAngle - angle);
+
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        if ([self contentView].cameraOrbit.eulerAngles.y < 0) {
+            [self resetCamera];
+        }
+    } else if (rotationAngle < 0) {
+        [self rotateToRotationAngle:rotationAngle/8];
+        CGFloat scale = 1 - rotationAngle;
+        [self contentView].sun.scale = SCNVector3Make(scale, scale, scale);
+    } else {
+        [self rotateToRotationAngle:rotationAngle];
+    }
 }
 
 - (void)tap:(UITapGestureRecognizer *)sender {
-  CGPoint location = [sender locationInView:self.view];
-  NSArray<SCNHitTestResult *> *hits = [[self contentView] hitTest:location options:nil];
-  SCNHitTestResult *firstHit = [hits firstObject];
-  SCNNode *parentNode = firstHit.node.parentNode;
-  SCNVector3 parentPosition = parentNode.position;
-  NSLog(@"parent: %@", parentNode.name);
-  NSLog(@"parent: %lf %lf %lf", parentPosition.x, parentPosition.y, parentPosition.z);
+    CGPoint location = [sender locationInView:self.view];
+    NSArray<SCNHitTestResult *> *hits = [[self contentView] hitTest:location options:nil];
+    SCNHitTestResult *firstHit = [hits firstObject];
+    SCNNode *parentNode = firstHit.node.parentNode;
+    SCNVector3 parentPosition = parentNode.position;
+    NSLog(@"parent: %@", parentNode.name);
+    NSLog(@"parent: %lf %lf %lf", parentPosition.x, parentPosition.y, parentPosition.z);
 
-  NSMutableArray<DDHBirthday *> *selectedBirthdays = [[NSMutableArray alloc] init];
-  [self.birthdays enumerateObjectsUsingBlock:^(DDHBirthday * _Nonnull birthday, NSUInteger idx, BOOL * _Nonnull stop) {
-    if (birthday.daysLeft == [parentNode.name integerValue]) {
-      [selectedBirthdays addObject:birthday];
+    NSMutableArray<DDHBirthday *> *selectedBirthdays = [[NSMutableArray alloc] init];
+    [self.birthdays enumerateObjectsUsingBlock:^(DDHBirthday * _Nonnull birthday, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (birthday.daysLeft == [parentNode.name integerValue]) {
+            [selectedBirthdays addObject:birthday];
+        }
+    }];
+
+    NSLog(@"selectedBirthdays: %@", selectedBirthdays);
+
+    SCNVector3 parentRelativePosition = SCNVector3Make(parentPosition.x, 10, parentPosition.z + 10);
+    if (SCNVector3EqualToVector3([self contentView].cameraOrbit.childNodes.firstObject.position, parentRelativePosition)) {
+        return;
     }
-  }];
 
-  NSLog(@"selectedBirthdays: %@", selectedBirthdays);
-
-  SCNVector3 parentRelativePosition = SCNVector3Make(parentPosition.x, 10, parentPosition.z + 10);
-  if (SCNVector3EqualToVector3([self contentView].cameraOrbit.childNodes.firstObject.position, parentRelativePosition)) {
-    return;
-  }
-
-  if ([selectedBirthdays count] > 0) {
-    for (SCNNode *node in self.hostNodes) {
-      if (node != parentNode) {
-        [self.nodesToHide addObject:node];
-      }
-    }
+    if ([selectedBirthdays count] > 0) {
+        for (SCNNode *node in self.hostNodes) {
+            if (node != parentNode) {
+                [self.nodesToHide addObject:node];
+            }
+        }
 #warning "Add support for birthdays on same day"
-    //    DDHBirthdayDetailsView *birthdayDetail = [[DDHBirthdayDetailsView alloc] initWithFrame:[self contentView].bounds];
-    //    [birthdayDetail updateWithBirthday:selectedBirthdays.firstObject nameFormatter:self.nameFormatter];
-    //    [self contentView].overlaySKScene = birthdayDetail.scene;
+        //    DDHBirthdayDetailsView *birthdayDetail = [[DDHBirthdayDetailsView alloc] initWithFrame:[self contentView].bounds];
+        //    [birthdayDetail updateWithBirthday:selectedBirthdays.firstObject nameFormatter:self.nameFormatter];
+        //    [self contentView].overlaySKScene = birthdayDetail.scene;
 
-    [self animateCameraFrom:SCNVector3Zero to:parentRelativePosition];
+        [self animateCameraFrom:SCNVector3Zero to:parentRelativePosition];
 
-    [self.nodesToHide enumerateObjectsUsingBlock:^(SCNNode * _Nonnull node, NSUInteger idx, BOOL * _Nonnull stop) {
-      CABasicAnimation *changeCameraPositionAnimation = [self animationWithKeyPath:@"opacity" fromValue:@1 toValue:@0];
-      [node addAnimation:changeCameraPositionAnimation forKey:@"changeOpacity"];
+        [self.nodesToHide enumerateObjectsUsingBlock:^(SCNNode * _Nonnull node, NSUInteger idx, BOOL * _Nonnull stop) {
+            CABasicAnimation *changeCameraPositionAnimation = [self animationWithKeyPath:@"opacity" fromValue:@1 toValue:@0];
+            [node addAnimation:changeCameraPositionAnimation forKey:@"changeOpacity"];
 
-      node.opacity = 0;
-    }];
+            node.opacity = 0;
+        }];
 
-  } else {
-    //    [self contentView].overlaySKScene = nil;
+    } else {
+        //    [self contentView].overlaySKScene = nil;
 
-    [self animateCameraFrom:SCNVector3Zero to:SCNVector3Make(0, 13, 35)];
+        [self animateCameraFrom:SCNVector3Zero to:SCNVector3Make(0, 13, 35)];
 
-    [self.nodesToHide enumerateObjectsUsingBlock:^(SCNNode * _Nonnull node, NSUInteger idx, BOOL * _Nonnull stop) {
-      CABasicAnimation *changeCameraPositionAnimation = [self animationWithKeyPath:@"opacity" fromValue:@0 toValue:@1];
-      [node addAnimation:changeCameraPositionAnimation forKey:@"changeOpacity"];
+        [self.nodesToHide enumerateObjectsUsingBlock:^(SCNNode * _Nonnull node, NSUInteger idx, BOOL * _Nonnull stop) {
+            CABasicAnimation *changeCameraPositionAnimation = [self animationWithKeyPath:@"opacity" fromValue:@0 toValue:@1];
+            [node addAnimation:changeCameraPositionAnimation forKey:@"changeOpacity"];
 
-      node.opacity = 1;
-    }];
+            node.opacity = 1;
+        }];
 
-    for (SCNNode *node in self.hostNodes) {
-      [self.nodesToHide removeObject:node];
+        for (SCNNode *node in self.hostNodes) {
+            [self.nodesToHide removeObject:node];
+        }
     }
-  }
 }
 
 - (void)animateCameraFrom:(SCNVector3)startPosition to:(SCNVector3)endPosition {
-  SCNNode *cameraNode = [self contentView].cameraOrbit.childNodes.firstObject;
-  if (SCNVector3EqualToVector3(startPosition, SCNVector3Zero)) {
-    startPosition = cameraNode.position;
-  } else {
-    cameraNode.position = startPosition;
-  }
+    SCNNode *cameraNode = [self contentView].cameraOrbit.childNodes.firstObject;
+    if (SCNVector3EqualToVector3(startPosition, SCNVector3Zero)) {
+        startPosition = cameraNode.position;
+    } else {
+        cameraNode.position = startPosition;
+    }
 
-  CABasicAnimation *changeCameraPositionAnimation = [self animationWithKeyPath:@"position" fromValue:[NSValue valueWithSCNVector3:startPosition] toValue:[NSValue valueWithSCNVector3:endPosition]];
-  [cameraNode addAnimation:changeCameraPositionAnimation forKey:@"changeCameraPosition"];
+    CABasicAnimation *changeCameraPositionAnimation = [self animationWithKeyPath:@"position" fromValue:[NSValue valueWithSCNVector3:startPosition] toValue:[NSValue valueWithSCNVector3:endPosition]];
+    [cameraNode addAnimation:changeCameraPositionAnimation forKey:@"changeCameraPosition"];
 
-  cameraNode.position = endPosition;
+    cameraNode.position = endPosition;
 }
 
 - (CABasicAnimation *)animationWithKeyPath:(NSString *)keyPath fromValue:(id)fromValue toValue:(id)toValue {
-  CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:keyPath];
-  animation.fromValue = fromValue;
-  animation.toValue = toValue;
-  animation.duration = 0.5;
-  animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-  animation.removedOnCompletion = NO;
-  animation.fillMode = kCAFillModeForwards;
-  return animation;
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:keyPath];
+    animation.fromValue = fromValue;
+    animation.toValue = toValue;
+    animation.duration = 0.5;
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    animation.removedOnCompletion = NO;
+    animation.fillMode = kCAFillModeForwards;
+    return animation;
 }
 
 - (void)resetCamera {
-  NSTimeInterval duration = 0.2;
+    NSTimeInterval duration = 0.2;
 
-  [[self contentView].sun runAction:[SCNAction scaleTo:1 duration:duration]];
-  [self runRotateToZeroActionForNodes:@[[self contentView].cameraOrbit] withDuration:duration];
+    [[self contentView].sun runAction:[SCNAction scaleTo:1 duration:duration]];
+    [self runRotateToZeroActionForNodes:@[[self contentView].cameraOrbit] withDuration:duration];
 
-  [self runRotateToZeroActionForNodes:self.hostNodes withDuration:duration];
+    [self runRotateToZeroActionForNodes:self.hostNodes withDuration:duration];
 }
 
 - (void)runRotateToZeroActionForNodes:(NSArray<SCNNode *> *)nodes withDuration:(NSTimeInterval)duration {
-  [nodes enumerateObjectsUsingBlock:^(SCNNode * _Nonnull node, NSUInteger idx, BOOL * _Nonnull stop) {
-    [node runAction:[SCNAction rotateToX:node.eulerAngles.x y:0 z:node.eulerAngles.z duration:duration shortestUnitArc:YES]];
-  }];
+    [nodes enumerateObjectsUsingBlock:^(SCNNode * _Nonnull node, NSUInteger idx, BOOL * _Nonnull stop) {
+        [node runAction:[SCNAction rotateToX:node.eulerAngles.x y:0 z:node.eulerAngles.z duration:duration shortestUnitArc:YES]];
+    }];
 }
 
 @end
