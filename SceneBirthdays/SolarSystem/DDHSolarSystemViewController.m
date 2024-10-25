@@ -61,9 +61,9 @@
     NSArray<DDHSceneMonth *> *sceneMonths = [DDHDateHelper sceneMonths];
     NSArray<SCNNode *> *monthsNodes = [self.nodesCreator monthNodesWithNumberOfDaysInYear:[self daysInYear] sceneMonth:sceneMonths];
     [self.nodesToHide addObjectsFromArray:monthsNodes];
-    [monthsNodes enumerateObjectsUsingBlock:^(SCNNode * _Nonnull node, NSUInteger idx, BOOL * _Nonnull stop) {
+    for (SCNNode *node in monthsNodes) {
         [[self contentView].scene.rootNode addChildNode:node];
-    }];
+    }
 
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
     [self.view addGestureRecognizer:tapRecognizer];
@@ -153,8 +153,7 @@
     NSMutableDictionary<NSNumber *, NSMutableArray<DDHBirthday *> *> *birthdayNodes = [[NSMutableDictionary alloc] initWithCapacity:[birthdays count]];
     NSMutableArray<SCNNode *> *hostNodes = [[NSMutableArray alloc] initWithCapacity:[birthdays count]];
 
-    [birthdays enumerateObjectsUsingBlock:^(DDHBirthday * _Nonnull birthday, NSUInteger idx, BOOL * _Nonnull stop) {
-
+    for (DDHBirthday *birthday in birthdays) {
         NSInteger daysLeft = birthday.daysLeft;
 
         NSMutableArray<DDHBirthday *> *birthdaysForDaysLeft = birthdayNodes[@(daysLeft)];
@@ -178,7 +177,7 @@
         [birthdaysForDaysLeft addObject:birthday];
         birthdayNodes[@(daysLeft)] = birthdaysForDaysLeft;
         //    }
-    }];
+    }
 
     [nodesForDaysLeft enumerateKeysAndObjectsUsingBlock:^(NSNumber * _Nonnull daysLeft, SCNNode * _Nonnull node, BOOL * _Nonnull stop) {
         NSArray<DDHBirthday *> *birthdays = birthdayNodes[daysLeft];
@@ -254,11 +253,11 @@
     NSLog(@"parent: %lf %lf %lf", parentPosition.x, parentPosition.y, parentPosition.z);
 
     NSMutableArray<DDHBirthday *> *selectedBirthdays = [[NSMutableArray alloc] init];
-    [self.birthdays enumerateObjectsUsingBlock:^(DDHBirthday * _Nonnull birthday, NSUInteger idx, BOOL * _Nonnull stop) {
+    for (DDHBirthday *birthday in self.birthdays) {
         if (birthday.daysLeft == [parentNode.name integerValue]) {
             [selectedBirthdays addObject:birthday];
         }
-    }];
+    }
 
     NSLog(@"selectedBirthdays: %@", selectedBirthdays);
 
@@ -280,24 +279,24 @@
 
         [self animateCameraFrom:SCNVector3Zero to:parentRelativePosition];
 
-        [self.nodesToHide enumerateObjectsUsingBlock:^(SCNNode * _Nonnull node, NSUInteger idx, BOOL * _Nonnull stop) {
+        for (SCNNode *node in self.nodesToHide) {
             CABasicAnimation *changeCameraPositionAnimation = [self animationWithKeyPath:@"opacity" fromValue:@1 toValue:@0];
             [node addAnimation:changeCameraPositionAnimation forKey:@"changeOpacity"];
 
             node.opacity = 0;
-        }];
+        }
 
     } else {
         //    [self contentView].overlaySKScene = nil;
 
         [self animateCameraFrom:SCNVector3Zero to:SCNVector3Make(0, 13, 35)];
 
-        [self.nodesToHide enumerateObjectsUsingBlock:^(SCNNode * _Nonnull node, NSUInteger idx, BOOL * _Nonnull stop) {
+        for (SCNNode *node in self.nodesToHide) {
             CABasicAnimation *changeCameraPositionAnimation = [self animationWithKeyPath:@"opacity" fromValue:@0 toValue:@1];
             [node addAnimation:changeCameraPositionAnimation forKey:@"changeOpacity"];
 
             node.opacity = 1;
-        }];
+        }
 
         for (SCNNode *node in self.hostNodes) {
             [self.nodesToHide removeObject:node];
@@ -340,9 +339,9 @@
 }
 
 - (void)runRotateToZeroActionForNodes:(NSArray<SCNNode *> *)nodes withDuration:(NSTimeInterval)duration {
-    [nodes enumerateObjectsUsingBlock:^(SCNNode * _Nonnull node, NSUInteger idx, BOOL * _Nonnull stop) {
+    for (SCNNode *node in nodes) {
         [node runAction:[SCNAction rotateToX:node.eulerAngles.x y:0 z:node.eulerAngles.z duration:duration shortestUnitArc:YES]];
-    }];
+    }
 }
 
 @end
