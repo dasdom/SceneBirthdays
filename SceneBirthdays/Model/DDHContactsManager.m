@@ -1,5 +1,5 @@
 //  Created by Dominik Hauser on 05.05.24.
-//  
+//
 //
 
 
@@ -37,7 +37,7 @@
         CNContactBirthdayKey,
         CNContactThumbnailImageDataKey
     ]];
-    
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         NSError *fetchError;
         NSMutableArray<CNContact *> *contacts = [[NSMutableArray alloc] init];
@@ -53,10 +53,12 @@
 
 - (NSArray<DDHBirthday *> *)birthdaysFromContacts:(NSArray<CNContact *> *)contacts {
     NSMutableArray<DDHBirthday *> *birthdays = [NSMutableArray arrayWithCapacity:[contacts count]];
-    [contacts enumerateObjectsUsingBlock:^(CNContact * _Nonnull contact, NSUInteger idx, BOOL * _Nonnull stop) {
+
+    for (CNContact *contact in contacts) {
         DDHBirthday *birthday = [[DDHBirthday alloc] initWithContact:contact];
         [birthdays addObject:birthday];
-    }];
+    }
+
     return birthdays;
 }
 
