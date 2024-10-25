@@ -120,71 +120,92 @@ const CGFloat scaledEarthPathRadius = earthOrbit * orbitScaleFactor;
   return dotNode;
 }
 
-- (SCNNode *)addBirthdayNodeForBirthday:(DDHBirthday *)birthday toNode:(SCNNode *)node {
-  SCNNode *birthdayNode = [self birthdayIndicatorForBirthday:birthday];
-  [node addChildNode:birthdayNode];
-  [self positionChildNodesInNode:node];
-  return birthdayNode;
+- (NSArray<SCNNode *> *)addBirthdayNodeForBirthdays:(NSArray<DDHBirthday *> *)birthdays toNode:(SCNNode *)node {
+  NSArray<SCNNode *> *birthdayNodes = [self birthdayIndicatorForBirthdays:birthdays];
+  for (SCNNode *birthdayNode in birthdayNodes) {
+    [node addChildNode:birthdayNode];
+  }
+  return birthdayNodes;
 }
 
-- (void)positionChildNodesInNode:(SCNNode *)node {
-  CGFloat zPosFactor = -0.001;
-  NSInteger numberOfChilds = [node.childNodes count];
-  CGFloat radius;
-  if (numberOfChilds < 2) {
-    radius = [self birthdayIndicatorWidth]/2;
-  } else {
-    radius = [self birthdayIndicatorWidth]/4;
-  }
-  [node.childNodes enumerateObjectsUsingBlock:^(SCNNode * _Nonnull childNode, NSUInteger idx, BOOL * _Nonnull stop) {
-    if (numberOfChilds < 2) {
-      ((SCNPlane*)childNode.geometry).width = [self birthdayIndicatorWidth];
-      ((SCNPlane*)childNode.geometry).height = [self birthdayIndicatorWidth];
-    } else {
-      ((SCNPlane*)childNode.geometry).width = [self birthdayIndicatorWidth]/2;
-      ((SCNPlane*)childNode.geometry).height = [self birthdayIndicatorWidth]/2;
-    }
-    CGFloat angle = 360.0/numberOfChilds * idx + 180;
-    CGFloat x = radius * sin(angle * M_PI / 180.0);
-    CGFloat y = radius * cos(angle * M_PI / 180.0);
-    childNode.position = SCNVector3Make(x, y + 2 * radius + 0.4, zPosFactor * idx);
-  }];
-}
+//- (void)positionChildNodesInNode:(SCNNode *)node {
+//  CGFloat zPosFactor = -0.001;
+//  NSInteger numberOfChilds = [node.childNodes count];
+//
+//  CGFloat radius;
+//  if (numberOfChilds < 2) {
+//    radius = [self birthdayIndicatorWidth]/2;
+//  } else {
+//    radius = [self birthdayIndicatorWidth]/4;
+//  }
+//
+//  [node.childNodes enumerateObjectsUsingBlock:^(SCNNode * _Nonnull childNode, NSUInteger idx, BOOL * _Nonnull stop) {
+//    if (numberOfChilds < 2) {
+//      ((SCNPlane*)childNode.geometry).width = [self birthdayIndicatorWidth];
+//      ((SCNPlane*)childNode.geometry).height = [self birthdayIndicatorWidth];
+//    } else {
+//      ((SCNPlane*)childNode.geometry).width = [self birthdayIndicatorWidth]/2;
+//      ((SCNPlane*)childNode.geometry).height = [self birthdayIndicatorWidth]/2;
+//    }
+//    
+//    CGFloat angle = 360.0/numberOfChilds * idx + 180;
+//    CGFloat x = radius * sin(angle * M_PI / 180.0);
+//    CGFloat y = radius * cos(angle * M_PI / 180.0);
+//    childNode.position = SCNVector3Make(x, y + 2 * radius + 0.4, zPosFactor * idx);
+//  }];
+//}
 
 - (CGFloat)birthdayIndicatorWidth {
   return 6;
 }
 
-- (SCNNode *)birthdayIndicatorForBirthday:(DDHBirthday *)birthday {
-  SCNMaterial *material = [[SCNMaterial alloc] init];
-  UIImage *image = [UIImage imageWithData:birthday.imageData];
-  UIImage *roundedImage = [image roundedWithColor:[UIColor whiteColor] width:10 targetSize:CGSizeMake(500, 500)];
-  material.diffuse.contents = roundedImage;
+- (NSArray<SCNNode *> *)birthdayIndicatorForBirthdays:(NSArray<DDHBirthday *> *)birthdays {
+  NSMutableArray<SCNNode *> *nodes = [[NSMutableArray alloc] init];
 
-  SCNPlane *plane = [SCNPlane planeWithWidth:[self birthdayIndicatorWidth]/2 height:[self birthdayIndicatorWidth]/2];
-  plane.cornerRadius = [self birthdayIndicatorWidth]/4;
-  plane.materials = @[material];
+  [birthdays enumerateObjectsUsingBlock:^(DDHBirthday * _Nonnull birthday, NSUInteger idx, BOOL * _Nonnull stop) {
+    SCNMaterial *material = [[SCNMaterial alloc] init];
+    UIImage *image = [UIImage imageWithData:birthday.imageData];
+    UIImage *roundedImage = [image roundedWithColor:[UIColor whiteColor] width:10 targetSize:CGSizeMake(500, 500)];
+    material.diffuse.contents = roundedImage;
 
-  SCNNode *node = [SCNNode nodeWithGeometry:plane];
-//  CGFloat zPosFactor = -0.001;
-//  node.position = SCNVector3Make(0, [self birthdayIndicatorWidth]/2 + 0.4, zPosFactor * index);
-  node.categoryBitMask = 1 << 0;
+    CGFloat radius;
+    if ([birthdays count] < 2) {
+      radius = [self birthdayIndicatorWidth]/2;
+    } else {
+      radius = [self birthdayIndicatorWidth]/4;
+    }
 
-  SCNMaterial *textMaterial = [[SCNMaterial alloc] init];
-  textMaterial.diffuse.contents = [UIColor systemGrayColor];
+    SCNPlane *plane = [SCNPlane planeWithWidth:radius*2 height:radius*2];
+    plane.cornerRadius = radius;
+    plane.materials = @[material];
 
-  SCNText *text = [SCNText textWithString:[NSString stringWithFormat:@"%@", birthday.personNameComponents.givenName] extrusionDepth:0.1];
-  text.materials = @[textMaterial];
-  text.font = [UIFont boldSystemFontOfSize:0.6];
-  text.chamferRadius = 0.02;
+    CGFloat zPosFactor = -0.001;
+    CGFloat angle = 360.0/[birthdays count] * idx + 180;
+    CGFloat x = radius * sin(angle * M_PI / 180.0);
+    CGFloat y = radius * cos(angle * M_PI / 180.0) + 2 * radius + 0.4;
+    CGFloat z = zPosFactor * idx;
 
-  SCNNode *textNode = [SCNNode nodeWithGeometry:text];
-  textNode.position = SCNVector3Make(0, -[self birthdayIndicatorWidth]/2 - 1.1 , 0);
-  [self center:textNode];
+    SCNNode *node = [SCNNode nodeWithGeometry:plane];
+    node.position = SCNVector3Make(x, y, z);
+    node.categoryBitMask = 1 << 0;
 
-  [node addChildNode:textNode];
+    SCNMaterial *textMaterial = [[SCNMaterial alloc] init];
+    textMaterial.diffuse.contents = [UIColor systemGrayColor];
 
-  return node;
+    SCNText *text = [SCNText textWithString:[NSString stringWithFormat:@"%@", birthday.personNameComponents.givenName] extrusionDepth:0.1];
+    text.materials = @[textMaterial];
+    text.font = [UIFont boldSystemFontOfSize:0.6];
+    text.chamferRadius = 0.02;
+
+    SCNNode *textNode = [SCNNode nodeWithGeometry:text];
+    textNode.position = SCNVector3Make(-x, -y - [self birthdayIndicatorWidth]/6 - idx*0.5, 0);
+    [self center:textNode];
+
+    [node addChildNode:textNode];
+    [nodes addObject:node];
+  }];
+
+  return [nodes copy];
 }
 
 - (NSArray<SCNNode *> *)significantIntervalsIndicatorNodesWithNumberOfDaysInYear:(NSInteger)numberOfDaysInYear {

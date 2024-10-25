@@ -150,11 +150,17 @@
   }
 
   NSMutableDictionary<NSNumber *, SCNNode *> *nodesForDaysLeft = [[NSMutableDictionary alloc] init];
-//  NSMutableDictionary<NSUUID *, SCNNode *> *birthdayNodes = [[NSMutableDictionary alloc] initWithCapacity:[birthdays count]];
+  NSMutableDictionary<NSNumber *, NSMutableArray<DDHBirthday *> *> *birthdayNodes = [[NSMutableDictionary alloc] initWithCapacity:[birthdays count]];
   NSMutableArray<SCNNode *> *hostNodes = [[NSMutableArray alloc] initWithCapacity:[birthdays count]];
+
   [birthdays enumerateObjectsUsingBlock:^(DDHBirthday * _Nonnull birthday, NSUInteger idx, BOOL * _Nonnull stop) {
 
     NSInteger daysLeft = birthday.daysLeft;
+
+    NSMutableArray<DDHBirthday *> *birthdaysForDaysLeft = birthdayNodes[@(daysLeft)];
+    if (nil == birthdaysForDaysLeft) {
+      birthdaysForDaysLeft = [[NSMutableArray alloc] init];
+    }
 
     SCNNode *hostNode = nodesForDaysLeft[@(daysLeft)];
     if (nil != hostNode) {
@@ -164,13 +170,21 @@
     } else {
       hostNode = [self.nodesCreator birthdayHostNodeForDaysLeft:daysLeft numberOfDaysInYear:[self daysInYear] eulerAngles:SCNVector3Make(self.verticalAngle, [self contentView].cameraOrbit.eulerAngles.y, 0)];
       [hostNodes addObject:hostNode];
-    }
-      [self.nodesCreator addBirthdayNodeForBirthday:birthday toNode:hostNode];
       [[self contentView].earthPath addChildNode:hostNode];
+    }
 
-      nodesForDaysLeft[@(daysLeft)] = hostNode;
-//    }
+    nodesForDaysLeft[@(daysLeft)] = hostNode;
+
+    [birthdaysForDaysLeft addObject:birthday];
+    birthdayNodes[@(daysLeft)] = birthdaysForDaysLeft;
+    //    }
   }];
+
+  [nodesForDaysLeft enumerateKeysAndObjectsUsingBlock:^(NSNumber * _Nonnull daysLeft, SCNNode * _Nonnull node, BOOL * _Nonnull stop) {
+    NSArray<DDHBirthday *> *birthdays = birthdayNodes[daysLeft];
+    [self.nodesCreator addBirthdayNodeForBirthdays:birthdays toNode:node];
+  }];
+
   self.hostNodes = [hostNodes copy];
 }
 

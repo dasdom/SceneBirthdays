@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (SCNNode *)directionalLightNode;
 - (SCNNode *)ambientLightNode;
 - (SCNNode *)birthdayHostNodeForDaysLeft:(NSInteger)daysLeft numberOfDaysInYear:(NSInteger)numberOfDaysInYear eulerAngles:(SCNVector3)eulerAngles;
-- (SCNNode *)addBirthdayNodeForBirthday:(DDHBirthday *)birthday toNode:(SCNNode *)node;
+- (NSArray<SCNNode *> *)addBirthdayNodeForBirthdays:(NSArray<DDHBirthday *> *)birthdays toNode:(SCNNode *)node;
 - (NSArray<SCNNode *> *)significantIntervalsIndicatorNodesWithNumberOfDaysInYear:(NSInteger)numberOfDaysInYear;
 - (NSArray<SCNNode *> *)monthNodesWithNumberOfDaysInYear:(NSInteger)numberOfDaysInYear sceneMonth:(NSArray<DDHSceneMonth *> *)sceneMonths;
 @end
