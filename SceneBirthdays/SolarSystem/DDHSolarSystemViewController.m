@@ -9,6 +9,7 @@
 #import "DDHNodesCreator.h"
 #import "DDHBirthday.h"
 #import "DDHDateHelper.h"
+#import "DDHBirthdaysListViewController.h"
 //#import "DDHBirthdayDetailsView.h"
 
 @interface DDHSolarSystemViewController () <CAAnimationDelegate>
@@ -20,6 +21,7 @@
 @property (nonatomic, strong) NSArray<SCNNode *> *hostNodes;
 @property (nonatomic, strong) NSMutableArray<SCNNode *> *nodesToHide;
 @property (nonatomic, strong) NSPersonNameComponentsFormatter *nameFormatter;
+@property (nonatomic, strong) DDHBirthdaysListViewController *listViewController;
 @end
 
 @implementation DDHSolarSystemViewController
@@ -261,7 +263,7 @@
 
     NSLog(@"selectedBirthdays: %@", selectedBirthdays);
 
-    SCNVector3 parentRelativePosition = SCNVector3Make(parentPosition.x, 10, parentPosition.z + 10);
+    SCNVector3 parentRelativePosition = SCNVector3Make(parentPosition.x + 8, 10, parentPosition.z + 10);
     if (SCNVector3EqualToVector3([self contentView].cameraOrbit.childNodes.firstObject.position, parentRelativePosition)) {
         return;
     }
@@ -272,12 +274,9 @@
                 [self.nodesToHide addObject:node];
             }
         }
-#warning "Add support for birthdays on same day"
-        //    DDHBirthdayDetailsView *birthdayDetail = [[DDHBirthdayDetailsView alloc] initWithFrame:[self contentView].bounds];
-        //    [birthdayDetail updateWithBirthday:selectedBirthdays.firstObject nameFormatter:self.nameFormatter];
-        //    [self contentView].overlaySKScene = birthdayDetail.scene;
 
-        [self animateCameraFrom:SCNVector3Zero to:parentRelativePosition];
+        UIView *subview = [self showList];
+        [self animateCameraFrom:SCNVector3Zero to:parentRelativePosition subview:subview];
 
         for (SCNNode *node in self.nodesToHide) {
             CABasicAnimation *changeCameraPositionAnimation = [self animationWithKeyPath:@"opacity" fromValue:@1 toValue:@0];
@@ -287,9 +286,8 @@
         }
 
     } else {
-        //    [self contentView].overlaySKScene = nil;
-
-        [self animateCameraFrom:SCNVector3Zero to:SCNVector3Make(0, 13, 35)];
+        [self animateCameraFrom:SCNVector3Zero to:SCNVector3Make(0, 13, 35) subview:self.listViewController.view];
+        [self hideList];
 
         for (SCNNode *node in self.nodesToHide) {
             CABasicAnimation *changeCameraPositionAnimation = [self animationWithKeyPath:@"opacity" fromValue:@0 toValue:@1];
@@ -301,10 +299,51 @@
         for (SCNNode *node in self.hostNodes) {
             [self.nodesToHide removeObject:node];
         }
+
     }
 }
 
-- (void)animateCameraFrom:(SCNVector3)startPosition to:(SCNVector3)endPosition {
+- (UIView *)showList {
+    DDHBirthdaysListViewController *listViewController = [[DDHBirthdaysListViewController alloc] initWithBirthdays:self.birthdays];
+    [self addChildViewController:listViewController];
+    self.listViewController = listViewController;
+
+    UIView *subview = listViewController.view;
+    subview.alpha = 1;
+    subview.userInteractionEnabled = true;
+
+    [self.view addSubview:subview];
+
+    CGRect viewFrame = self.view.frame;
+    subview.frame = CGRectMake(3 * viewFrame.size.width / 2, 20, viewFrame.size.width/2, viewFrame.size.height - 40);
+
+    [listViewController didMoveToParentViewController:self];
+
+//   UIViewPropertyAnimator *animator = [[UIViewPropertyAnimator alloc] initWithDuration:0.3 dampingRatio:0.5 animations:^{
+//        subview.alpha = 1;
+//    }];
+//    [animator startAnimation];
+
+    return subview;
+}
+
+- (void)hideList {
+    UIView *subview = self.listViewController.view;
+
+    UIViewPropertyAnimator *animator = [[UIViewPropertyAnimator alloc] initWithDuration:0.3 dampingRatio:0.5 animations:^{
+        subview.alpha = 0;
+    }];
+    [animator addCompletion:^(UIViewAnimatingPosition finalPosition) {
+        [subview removeFromSuperview];
+        [self.listViewController removeFromParentViewController];
+        [self.listViewController didMoveToParentViewController:nil];
+        self.listViewController = nil;
+    }];
+
+    [animator startAnimation];
+}
+
+- (void)animateCameraFrom:(SCNVector3)startPosition to:(SCNVector3)endPosition subview:(UIView *)subview {
     SCNNode *cameraNode = [self contentView].cameraOrbit.childNodes.firstObject;
     if (SCNVector3EqualToVector3(startPosition, SCNVector3Zero)) {
         startPosition = cameraNode.position;
@@ -312,9 +351,19 @@
         cameraNode.position = startPosition;
     }
 
+    [CATransaction begin];
     CABasicAnimation *changeCameraPositionAnimation = [self animationWithKeyPath:@"position" fromValue:[NSValue valueWithSCNVector3:startPosition] toValue:[NSValue valueWithSCNVector3:endPosition]];
     [cameraNode addAnimation:changeCameraPositionAnimation forKey:@"changeCameraPosition"];
 
+    CGPoint startPoint = CGPointMake(CGRectGetMidX(subview.frame), CGRectGetMidY(subview.frame));
+    CGPoint endPoint = CGPointMake(self.view.frame.size.width - subview.frame.size.width/2, CGRectGetMidY(subview.frame));
+
+    CABasicAnimation *subviewPositionAnimation = [self animationWithKeyPath:@"position" fromValue:[NSValue valueWithCGPoint:startPoint] toValue:[NSValue valueWithCGPoint:endPoint]];
+    [subview.layer addAnimation:subviewPositionAnimation forKey:@"position"];
+
+    [CATransaction commit];
+
+    subview.layer.position = endPoint;
     cameraNode.position = endPosition;
 }
 

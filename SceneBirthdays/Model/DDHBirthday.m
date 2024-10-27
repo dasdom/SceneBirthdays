@@ -1,5 +1,5 @@
 //  Created by Dominik Hauser on 04.05.24.
-//  
+//
 //
 
 
@@ -25,7 +25,7 @@
         _imageData = contact.thumbnailImageData;
         _daysLeft = [DDHDateHelper daysLeftForDateComponents:contact.birthday];
         _date = [NSCalendar.currentCalendar dateFromComponents:contact.birthday];
-        
+
         NSPersonNameComponents *personNameComponents = [[NSPersonNameComponents alloc] init];
         personNameComponents.familyName = contact.familyName;
         personNameComponents.givenName = contact.givenName;

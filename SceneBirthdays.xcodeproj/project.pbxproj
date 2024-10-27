@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F2084D632CCE35CF00EB35C5 /* DDHBirthdaysListView.m in Sources */ = {isa = PBXBuildFile; fileRef = F2084D622CCE35CF00EB35C5 /* DDHBirthdaysListView.m */; };
+		F2084D672CCE35F400EB35C5 /* DDHBirthdaysListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2084D662CCE35F400EB35C5 /* DDHBirthdaysListViewController.m */; };
+		F268E8472CCE3A6F008B84EE /* DDHBirthdayCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F268E8462CCE3A6F008B84EE /* DDHBirthdayCell.m */; };
 		F283E7E82BEE7D4100F7244D /* DDHSceneMonth.m in Sources */ = {isa = PBXBuildFile; fileRef = F283E7E72BEE7D4100F7244D /* DDHSceneMonth.m */; };
 		F2D4E2112BE565A700432050 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D4E2102BE565A700432050 /* AppDelegate.m */; };
 		F2D4E21A2BE565A700432050 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = F2D4E2192BE565A700432050 /* Base */; };
@@ -25,6 +28,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F2084D612CCE35CF00EB35C5 /* DDHBirthdaysListView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHBirthdaysListView.h; sourceTree = "<group>"; };
+		F2084D622CCE35CF00EB35C5 /* DDHBirthdaysListView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHBirthdaysListView.m; sourceTree = "<group>"; };
+		F2084D652CCE35F400EB35C5 /* DDHBirthdaysListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHBirthdaysListViewController.h; sourceTree = "<group>"; };
+		F2084D662CCE35F400EB35C5 /* DDHBirthdaysListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHBirthdaysListViewController.m; sourceTree = "<group>"; };
+		F268E8452CCE3A6F008B84EE /* DDHBirthdayCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHBirthdayCell.h; sourceTree = "<group>"; };
+		F268E8462CCE3A6F008B84EE /* DDHBirthdayCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHBirthdayCell.m; sourceTree = "<group>"; };
 		F283E7E62BEE7D4100F7244D /* DDHSceneMonth.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHSceneMonth.h; sourceTree = "<group>"; };
 		F283E7E72BEE7D4100F7244D /* DDHSceneMonth.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHSceneMonth.m; sourceTree = "<group>"; };
 		F2D4E20C2BE565A700432050 /* SceneBirthdays.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SceneBirthdays.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,6 +74,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F2084D642CCE35D600EB35C5 /* DayList */ = {
+			isa = PBXGroup;
+			children = (
+				F2084D612CCE35CF00EB35C5 /* DDHBirthdaysListView.h */,
+				F2084D622CCE35CF00EB35C5 /* DDHBirthdaysListView.m */,
+				F2084D652CCE35F400EB35C5 /* DDHBirthdaysListViewController.h */,
+				F2084D662CCE35F400EB35C5 /* DDHBirthdaysListViewController.m */,
+				F268E8452CCE3A6F008B84EE /* DDHBirthdayCell.h */,
+				F268E8462CCE3A6F008B84EE /* DDHBirthdayCell.m */,
+			);
+			path = DayList;
+			sourceTree = "<group>";
+		};
 		F2D4E2032BE565A700432050 = {
 			isa = PBXGroup;
 			children = (
@@ -90,6 +112,7 @@
 				F2D4E2102BE565A700432050 /* AppDelegate.m */,
 				F2D4E2542BE6094C00432050 /* SceneDelegate.h */,
 				F2D4E2552BE6094C00432050 /* SceneDelegate.m */,
+				F2084D642CCE35D600EB35C5 /* DayList */,
 				F2D4E2622BE763F400432050 /* SolarSystem */,
 				F2D4E2612BE763E500432050 /* Model */,
 				F2D4E25E2BE6862700432050 /* UIImage+Extenstion.h */,
@@ -163,7 +186,7 @@
 				TargetAttributes = {
 					F2D4E20B2BE565A700432050 = {
 						CreatedOnToolsVersion = 15.3;
-						LastSwiftMigration = 1530;
+						LastSwiftMigration = 1600;
 					};
 				};
 			};
@@ -204,6 +227,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F2084D632CCE35CF00EB35C5 /* DDHBirthdaysListView.m in Sources */,
+				F268E8472CCE3A6F008B84EE /* DDHBirthdayCell.m in Sources */,
+				F2084D672CCE35F400EB35C5 /* DDHBirthdaysListViewController.m in Sources */,
 				F2D4E2112BE565A700432050 /* AppDelegate.m in Sources */,
 				F283E7E82BEE7D4100F7244D /* DDHSceneMonth.m in Sources */,
 				F2D4E2302BE5683200432050 /* DDHNodesCreator.m in Sources */,
